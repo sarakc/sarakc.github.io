@@ -1,1 +1,0 @@
-import{_ as c,r as o,c as s,d as t,o as n}from"./index-YKYIBvhP.js";const r={},_={class:"cv"};function a(d,f){const e=o("pdf");return n(),s("div",_,[t(e,{src:"cv.pdf"})])}const i=c(r,[["render",a]]);export{i as default};
