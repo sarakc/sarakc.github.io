@@ -1,1 +1,1 @@
-Thanks for visiting Sara Court's personal website: [sarakc.github.io](sarakc.github.io)
+Thanks for visiting Sara Court's personal website: [https://sarakc.github.io](https://sarakc.github.io)
