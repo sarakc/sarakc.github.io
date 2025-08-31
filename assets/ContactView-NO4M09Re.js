@@ -1,1 +1,0 @@
-import{_ as t,c as e,o as c,b as o}from"./index-7f_n-xRg.js";const s={},n={class:"contact"},a=o("h1",null,"Contact Me",-1),_=[a];function r(d,i){return c(),e("div",n,_)}const f=t(s,[["render",r]]);export{f as default};
