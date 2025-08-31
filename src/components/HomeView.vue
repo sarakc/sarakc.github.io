@@ -7,7 +7,6 @@ import IconContact from './icons/IconContact.vue'
 </script>
 
 <template>
-  
   <header>
     <img alt="Colors" class="logo" src="@/assets/montana.jpg" />
     <div class="wrapper">
@@ -15,8 +14,7 @@ import IconContact from './icons/IconContact.vue'
     <h1>Sara Court</h1>
       <span class="title">PhD Research Scientist</span><br>
       <span class="subtitle">Department of Linguistics,<br>The Ohio State University</span>
-  </div>
-      
+      </div>
     </div>
   </header>
 <div class="welcome-items">
@@ -50,9 +48,6 @@ import IconContact from './icons/IconContact.vue'
     
     <p>I'm a<a href="https://aclanthology.org/2020.coling-main.258/" target="_blank" rel="noopener">computational morphologist,</a>among other things.
     I build and analyze<a href="https://aclanthology.org/2022.sigmorphon-1.22/" target="_blank" rel="noopener">models</a>for typologically diverse<a href="https://aclanthology.org/2023.scil-1.4.pdf" target="_blank" rel="noopener">languages in contact</a>and other <a href="https://docs.google.com/presentation/d/1iHJTTw4V7vCU4mJeAJWkUTKetmbyZOQHkHvWieAblMA/edit?slide=id.g337cf7c6c86_0_310#slide=id.g337cf7c6c86_0_310" target="_blank" rel="noopener">low-resource domains</a>with applications in<a href="https://aclanthology.org/2024.wmt-1.125/" target="_blank" rel="noopener">responsible machine translation</a>and tools for<a href="https://aclanthology.org/2022.computel-1.20/" target="_blank" rel="noopener">collaborative data annotation.</a></p>
-    <br/>
-    
-
   </WelcomeItem>
 
   <WelcomeItem>
@@ -79,7 +74,7 @@ import IconContact from './icons/IconContact.vue'
     </template>
     <template #heading>Contact</template>
     <p>
-    <img alt="osu" class="icon" src="@/assets/yellow-sun.svg" /> <a
+    <img alt="osu" class="icon" src="@/assets/osu.png" /> <a
       href="https://linguistics.osu.edu/people/court.22"
       target="_blank"
       rel="noopener"
