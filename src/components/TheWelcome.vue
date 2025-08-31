@@ -116,7 +116,8 @@ import SupportIcon from "./icons/IconSupport.vue";
       href="https://www.linkedin.com/in/sarakc/"
       target="_blank"
       rel="noopener"
-      >LinkedIn</a> <img alt="github" class="icon" src="@/assets/github.svg" /> <a href="https://github.com/sarakc" target="_blank" rel="noopener">GitHub</a><br />
+      >LinkedIn</a>   
+      <img alt="github" class="icon" src="@/assets/github.svg"/><a href="https://github.com/sarakc" target="_blank" rel="noopener">GitHub</a><br />
       ✉️  <a href="mailto:court.22@osu.edu">court DOT 22 AT osu DOT edu</a>
   </WelcomeItem>
 
@@ -142,7 +143,7 @@ import SupportIcon from "./icons/IconSupport.vue";
   border-radius: 0.5rem;
 }
 .icon {
-  height: .8em;
+  height: .9em;
   width: .9em;
 }
 .tagline {
