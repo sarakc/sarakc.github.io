@@ -1,0 +1,1 @@
+import{D as r,_ as t,G as s,r as e}from"./index-8FERgQD_.js";const n={},a={class:"projects"},o=r("h1",null,"Me IRL",-1),c=[o];function d(f,i){return s(),e("div",a,c)}const u=t(n,[["render",d]]);export{u as default};
