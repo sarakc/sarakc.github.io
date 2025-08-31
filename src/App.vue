@@ -1,5 +1,5 @@
 <template>
-  <HomeView msg="Welcome to Your Vue.js App!"/>
+  <HomeView msg="Welcome to Your Vue.js App!!"/>
 </template>
 
 <script>
