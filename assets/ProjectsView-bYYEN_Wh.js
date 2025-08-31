@@ -1,0 +1,1 @@
+import{b as e,c as s,o as c,e as o}from"./index-ERlcY8JZ.js";const t={},n={class:"projects"},r=o("h1",null,"Me IRL",-1),_=[r];function a(d,i){return c(),s("div",n,_)}const f=e(t,[["render",a]]);export{f as default};
