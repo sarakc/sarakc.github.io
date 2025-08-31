@@ -98,7 +98,7 @@ import SupportIcon from "./icons/IconSupport.vue";
       target="_blank"
       rel="noopener"
       >LinkedIn</a>profile to learn more about the work that I do.
-    <br/>Feel free to reach out via email to request an up-to-date <a href="src/assets/cv.pdf">resume | C.V.</a>in .pdf format.
+    <br/>Feel free to reach out via email to request an up-to-date <a href="/cv.pdf">resume | C.V.</a>in .pdf format.
   </WelcomeItem>
 
   <WelcomeItem>
@@ -116,7 +116,7 @@ import SupportIcon from "./icons/IconSupport.vue";
       href="https://www.linkedin.com/in/sarakc/"
       target="_blank"
       rel="noopener"
-      >LinkedIn</a><br />
+      >LinkedIn</a> <img alt="github" class="icon" src="@/assets/github.svg" /> <a href="https://github.com/sarakc" target="_blank" rel="noopener">GitHub</a><br />
       ✉️  <a href="mailto:court.22@osu.edu">court DOT 22 AT osu DOT edu</a>
   </WelcomeItem>
 
