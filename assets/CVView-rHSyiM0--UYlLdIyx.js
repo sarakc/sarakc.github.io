@@ -1,0 +1,1 @@
+import{_ as r,a,G as t,r as c,l as e}from"./index-iNGY45Yc.js";const d={},n={class:"cv"};function o(f,i){const s=a("pdf");return t(),c("div",n,[e(s,{src:"cv.pdf"})])}const p=r(d,[["render",o]]);export{p as default};
