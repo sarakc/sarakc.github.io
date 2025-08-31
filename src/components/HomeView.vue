@@ -175,7 +175,7 @@ header {
   max-width: 200px;
   max-height: auto;
   width: 100%;
-  margin-bottom: 2rem;
+  /* margin-bottom: 2rem; */
 }
 
 
@@ -184,14 +184,14 @@ header {
 @media (min-width: 1024px) {
   header {
     padding-top: 40px;
-    align-items: flex-start;
+    /* align-items: flex-start; */
     padding-right: calc(var(--section-gap) / 2);
     padding-bottom: 40px;
   }
 
-  .logo {
+  /* .logo {
     margin: 0 2rem 0 0;
-  }
+  } */
 
   header .wrapper {
     display: flex;
