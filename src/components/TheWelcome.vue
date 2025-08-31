@@ -52,7 +52,7 @@ import SupportIcon from "./icons/IconSupport.vue";
     <template #heading>Research</template>
     
     <!-- I'm a<RouterLink to="/research">computational contact morphologist</RouterLink>, among other things. -->
-    I'm a<a href="https://aclanthology.org/2020.coling-main.258/" target="_blank" rel="noopener">computational morphologist,</a>among other things.
+    I'm a<a href="https://aclanthology.org/2020.coling-main.258/" target="_blank" rel="noopener">computational morphologist,</a>among <a href="https://scholar.google.com/citations?user=zi74VNEAAAAJ&hl" target="_blank" rel="noopener">other things.</a>
     I build and analyze<a href="https://aclanthology.org/2022.sigmorphon-1.22/" target="_blank" rel="noopener">models</a>for typologically diverse<a href="https://aclanthology.org/2023.scil-1.4.pdf" target="_blank" rel="noopener">languages in contact</a>and other <a href="https://docs.google.com/presentation/d/1iHJTTw4V7vCU4mJeAJWkUTKetmbyZOQHkHvWieAblMA/edit?slide=id.g337cf7c6c86_0_310#slide=id.g337cf7c6c86_0_310" target="_blank" rel="noopener">low-resource domains</a>with applications in<a href="https://aclanthology.org/2024.wmt-1.125/" target="_blank" rel="noopener">responsible machine translation</a>and tools for<a href="https://aclanthology.org/2022.computel-1.20/" target="_blank" rel="noopener">collaborative data annotation.</a>
     <!-- <br/> -->
     <!-- If you can't already tell,  -->
