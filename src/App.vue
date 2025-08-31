@@ -7,16 +7,8 @@ import HelloWorld from './components/HelloWorld.vue'
   <header>
     <img alt="Colors" class="logo" src="@/assets/montana.jpg" />
     <div class="wrapper">
-      <HelloWorld msg="Sara Court" />
-
-      <nav>
-        <RouterLink to="/">About Me</RouterLink>
-        <!-- <RouterLink to="/about">About</RouterLink> -->
-        <RouterLink to="/research">Research</RouterLink>
-        <RouterLink to="/CV">CV</RouterLink>
-        <RouterLink to="/projects">Projects</RouterLink>
-        <RouterLink to="/contact">Contact</RouterLink>
-      </nav>
+      <HelloWorld msg="Sara Court"/>
+      
     </div>
   </header>
 
@@ -29,23 +21,26 @@ header {
   display: flex;
   flex-direction: column;
   align-items: center;
+  /* place-items: center; */
   /* max-height: 100vh; */
 }
 
 .logo {
   /* display: block; */
-  max-width: 250px;
+  max-width: 200px;
   max-height: auto;
   width: 100%;
-  margin-bottom: 1rem;
+  margin-bottom: 2rem;
   /* margin: 0 auto 2rem; */
 }
 
+
 nav {
   width: 100%;
-  font-size: 12px;
+  font-size: 23px;
+  font-weight: 600;
   text-align: center;
-  margin-top: 2rem;
+  margin-top:4rem;
 }
 
 nav a.router-link-exact-active {
@@ -71,8 +66,11 @@ nav a:first-of-type {
   header {
     /* display: flex; */
     /* flex-direction: row; */
-    place-items: center;
+    padding-top: 40px;
+    align-items: flex-start;
     padding-right: calc(var(--section-gap) / 2);
+    padding-left: 115px;
+    padding-bottom: 40px;
   }
 
   .logo {

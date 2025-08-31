@@ -1,6 +1,6 @@
 <template>
   <div class="cv">
-    <h1>Display CV here</h1>
+    <pdf src="cv.pdf" />
   </div>
 </template>
 

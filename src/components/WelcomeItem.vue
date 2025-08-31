@@ -36,14 +36,15 @@ i {
 h3 {
   font-size: 1.2rem;
   font-weight: 500;
-  margin-bottom: 0.4rem;
+  /* margin-bottom: 0.4rem; */
+  /* padding-bottom: 0.4rem; */
   color: var(--color-heading);
 }
 
 @media (min-width: 1024px) {
   .item {
     margin-top: 0;
-    padding: 0.4rem 0 1rem calc(var(--section-gap) / 2);
+    padding: 0.4rem 0 1rem 2.5rem;
   }
 
   i {

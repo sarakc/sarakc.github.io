@@ -2,6 +2,10 @@
 import WelcomeItem from "./WelcomeItem.vue";
 import DocumentationIcon from "./icons/IconDocumentation.vue";
 import ToolingIcon from "./icons/IconTooling.vue";
+import PythonIcon from "./icons/IconPython.vue";
+import IconBrainNetwork from "./icons/IconBrainNetwork.vue";
+import IconAbout from "./icons/IconAbout.vue";
+import IconContact from "./icons/IconContact.vue";
 import EcosystemIcon from "./icons/IconEcosystem.vue";
 import CommunityIcon from "./icons/IconCommunity.vue";
 import SupportIcon from "./icons/IconSupport.vue";
@@ -9,47 +13,61 @@ import SupportIcon from "./icons/IconSupport.vue";
 </script>
 
 <template>
+  <!-- <nav class="nav"> -->
+        <!-- <RouterLink to="/">Home</RouterLink>
+        <RouterLink to="/research">Research</RouterLink>
+        <RouterLink to="/CV">CV</RouterLink> -->
+        <!-- <RouterLink to="/projects">Projects</RouterLink>
+        <RouterLink to="/contact">Contact</RouterLink> -->
+      <!-- </nav> -->
   <WelcomeItem>
+    <div class="tagline">Computational Linguist • Machine Learning Engineer • Data Analyst • Community Builder</div>
     <template #icon>
       <!-- <DocumentationIcon /> -->
-      <i class="fa-solid fa-user"></i>
+      <IconAbout />
       <!-- <i class="fa-solid fa-user-astronaut" style="color: #B197FC;"></i> -->
       <!-- <font-awesome-icon :icon="['fas', 'user-astronaut']" style="color: #B197FC;" /> -->
     </template>
-    <template #heading>About Me</template>
-
+    
+    
+    <template #heading>About</template>
+    
     I'm currently a
-    <a href="https://linguistics.osu.edu/people/court.22" target="_blank" rel="noopener">PhD student</a>in the
-    Department of Linguistics at The Ohio State University, co-advised by
-    <!-- <a href="https://linguistics.osu.edu" target="_blank" rel="noopener">Department of Linguistics</a>at The Ohio State University, co-advised by -->
-  <a href="https://linguistics.osu.edu/people/elsner.14" target="_blank" rel="noopener">Micha Elsner</a>
-  and
-  <a href="https://linguistics.osu.edu/people/sims.120" target="_blank" rel="noopener">Andrea Sims</a>.
-
-
+    <a href="https://linguistics.osu.edu/people/court.22" target="_blank" rel="noopener">PhD Candidate</a>in the
+    Linguistics Department at The Ohio State University.<a href="https://linguistics.osu.edu/people/elsner.14" target="_blank" rel="noopener">
+    <br/>Micha Elsner</a>is my advisor.
   </WelcomeItem>
 
   <WelcomeItem>
     <template #icon>
-      <ToolingIcon />
+      <IconBrainNetwork />
     </template>
     <template #heading>Research</template>
-
-    I'm a<RouterLink to="/research">computational contact morphologist</RouterLink>, among other things.
-    <br/>I'm also a committed
-    <a
+      
+    <!-- I'm a<RouterLink to="/research">computational contact morphologist</RouterLink>, among other things. -->
+    I'm a computational morphologist, among other things.
+    I build and analyze models for typologically diverse languages in contact and other low-resource domains, with applications in machine translation and collaborative annotation.
+    <!-- <br/> -->
+    <!-- If you can't already tell,  -->
+    I'm also an avid<a
       href="https://buildingmovement.org/wp-content/uploads/2022/04/Ecosystem-Guide-April-2022.pdf"
       target="_blank"
       rel="noopener"
-      >weaver</a>
-      <!-- according to the
-      <a
+      >Weaver.</a>
+      <!-- and am committed to inclusive and responsible AI development. -->
+    <!-- <br/><br/> -->
+    <!-- a dedicated<a
+      href="https://buildingmovement.org/wp-content/uploads/2022/04/Ecosystem-Guide-April-2022.pdf"
+      target="_blank"
+      rel="noopener"
+      >Weaver</a>. -->
+      <!-- in my community's<a
       href="https://www.socialchangemap.com/framework"
       target="_blank"
       rel="noopener"
-      >Social Change Ecosystem</a>framework -->
-      -- I prioritize collaborative infrastructure building and resource development
-      throughout<RouterLink to="/research">my work as a linguist</RouterLink>.
+      >Social Change Ecosystem.</a> -->
+      <!-- -- I prioritize collaborative infrastructure building and resource development -->
+      <!-- throughout<RouterLink to="/research">my work as a linguist</RouterLink>. -->
       <!-- and<RouterLink to="/projects">life</RouterLink> -->
       <!-- Learn more about my<RouterLink to="/research">research interests</RouterLink>. -->
     <br/>
@@ -59,43 +77,64 @@ import SupportIcon from "./icons/IconSupport.vue";
 
   <WelcomeItem>
     <template #icon>
-      <EcosystemIcon />
+      <PythonIcon />
     </template>
-    <template #heading>Curriculum Vitae</template>
+    <template #heading>Resume</template>
 
-    You can download a copy of <RouterLink to="/CV">my CV</RouterLink>in .pdf format, or check out my
-    <a
+    You can download a copy of<RouterLink to="/CV">my CV</RouterLink>in .pdf format, or check out my<a
       href="https://scholar.google.com/citations?user=zi74VNEAAAAJ&hl"
       target="_blank"
       rel="noopener"
-      >Google Scholar</a>page and
-      <a
+      >Google Scholar</a>page and<a
       href="https://www.linkedin.com/in/sarakc/"
       target="_blank"
       rel="noopener"
-      >LinkedIn</a>profile for more information.
+      >LinkedIn</a>profile for more information about the work that I do.
     
   </WelcomeItem>
 
   <WelcomeItem>
     <template #icon>
-      <CommunityIcon />
-    </template>
-    <template #heading>Projects</template>
-  To learn more about me irl, check out some of my<RouterLink to="/projects">passion projects</RouterLink>.
-  </WelcomeItem>
-
-  <WelcomeItem>
-    <template #icon>
-      <SupportIcon />
+      <IconContact />
     </template>
     <template #heading>Contact</template>
 
-      [l]<a
+    <img alt="linkedin" class="icon" src="@/assets/linkedin.svg" /><a
       href="https://www.linkedin.com/in/sarakc/"
       target="_blank"
       rel="noopener"
       >LinkedIn</a><br />
-      [e] court DOT 22 AT osu DOT edu
+      ✉️ court DOT 22 AT osu DOT edu
   </WelcomeItem>
+
+  <!-- <WelcomeItem>
+    <template #icon>
+      <CommunityIcon />
+    </template>
+    <template #heading>Projects</template>
+  </WelcomeItem> -->
+
 </template>
+
+<style scoped>
+.nav {
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 9rem;
+  font-size: 23px;
+  /* background-color: #f0f0f0; */
+  border-radius: 0.5rem;
+}
+.icon {
+  height: 1em;
+  width: 1em;
+}
+.tagline {
+  font-size: 1rem;
+  font-weight: 500;
+  margin-bottom: .4rem;
+}
+</style>
