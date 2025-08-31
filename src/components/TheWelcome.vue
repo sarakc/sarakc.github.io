@@ -34,18 +34,19 @@ import SupportIcon from "./icons/IconSupport.vue";
     
     I'm currently a
     <a href="https://linguistics.osu.edu/people/court.22" target="_blank" rel="noopener">PhD Candidate</a>in the
-    Linguistics Department at The Ohio State University.<a href="https://linguistics.osu.edu/people/elsner.14" target="_blank" rel="noopener">
+    <a href="https://linguistics.osu.edu/" target="_blank" rel="noopener">Linguistics Department</a>at<a href="https://linguistics.osu.edu/" target="_blank" rel="noopener">The Ohio State University.</a><a href="https://linguistics.osu.edu/people/elsner.14" target="_blank" rel="noopener">
     <br/>Micha Elsner</a>is my advisor.
   </WelcomeItem>
+  
 
   <WelcomeItem>
     <template #icon>
       <IconBrainNetwork />
     </template>
     <template #heading>Research</template>
-      
+    
     <!-- I'm a<RouterLink to="/research">computational contact morphologist</RouterLink>, among other things. -->
-    I'm a computational morphologist, among other things.
+    I'm a<a href="https://aclanthology.org/2020.coling-main.258/" target="_blank" rel="noopener">computational morphologist</a>, among other things.
     I build and analyze models for typologically diverse languages in contact and other low-resource domains, with applications in machine translation and collaborative annotation.
     <!-- <br/> -->
     <!-- If you can't already tell,  -->
@@ -53,7 +54,7 @@ import SupportIcon from "./icons/IconSupport.vue";
       href="https://buildingmovement.org/wp-content/uploads/2022/04/Ecosystem-Guide-April-2022.pdf"
       target="_blank"
       rel="noopener"
-      >Weaver.</a>
+      >Weaver</a> and passionate about science outreach.
       <!-- and am committed to inclusive and responsible AI development. -->
     <!-- <br/><br/> -->
     <!-- a dedicated<a
@@ -81,7 +82,8 @@ import SupportIcon from "./icons/IconSupport.vue";
     </template>
     <template #heading>Resume</template>
 
-    You can download a copy of<RouterLink to="/CV">my CV</RouterLink>in .pdf format, or check out my<a
+    <!-- You can download a copy of<RouterLink to="/CV">my CV</RouterLink>in .pdf format, or c -->
+    Check out my<a
       href="https://scholar.google.com/citations?user=zi74VNEAAAAJ&hl"
       target="_blank"
       rel="noopener"
@@ -89,8 +91,8 @@ import SupportIcon from "./icons/IconSupport.vue";
       href="https://www.linkedin.com/in/sarakc/"
       target="_blank"
       rel="noopener"
-      >LinkedIn</a>profile for more information about the work that I do.
-    
+      >LinkedIn</a>profile to learn more about the work that I do.
+    <br/>Feel free to reach out via email for an up-to-date resume or C.V. in .pdf format.
   </WelcomeItem>
 
   <WelcomeItem>
@@ -98,13 +100,18 @@ import SupportIcon from "./icons/IconSupport.vue";
       <IconContact />
     </template>
     <template #heading>Contact</template>
-
-    <img alt="linkedin" class="icon" src="@/assets/linkedin.svg" /><a
+    <img alt="osu" class="icon" src="@/assets/osu.ico" /> <a
+      href="https://linguistics.osu.edu/people/court.22"
+      target="_blank"
+      rel="noopener"
+      >Sara Court</a>
+      <br/>
+    <img alt="linkedin" class="icon" src="@/assets/linkedin.svg" /> <a
       href="https://www.linkedin.com/in/sarakc/"
       target="_blank"
       rel="noopener"
       >LinkedIn</a><br />
-      ✉️ court DOT 22 AT osu DOT edu
+      ✉️  court DOT 22 AT osu DOT edu
   </WelcomeItem>
 
   <!-- <WelcomeItem>
@@ -129,8 +136,8 @@ import SupportIcon from "./icons/IconSupport.vue";
   border-radius: 0.5rem;
 }
 .icon {
-  height: 1em;
-  width: 1em;
+  height: .8em;
+  width: .9em;
 }
 .tagline {
   font-size: 1rem;
