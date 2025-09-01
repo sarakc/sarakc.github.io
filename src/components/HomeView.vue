@@ -65,7 +65,7 @@ import IconContact from './icons/IconContact.vue'
       target="_blank"
       rel="noopener"
       >LinkedIn</a>profile to learn more about the work that I do.
-    <br/>Feel free to reach out via email to request an up-to-date <a href="/cv.pdf">resume | C.V.</a>in .pdf format.</p>
+    <br/>Feel free to reach out via email to request an up-to-date <a href="/public/cv.pdf">resume | C.V.</a>in .pdf format.</p>
   </WelcomeItem>
 
   <WelcomeItem>
