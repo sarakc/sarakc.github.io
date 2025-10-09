@@ -34,7 +34,7 @@ import IconContact from './icons/IconContact.vue'
       href="https://buildingmovement.org/wp-content/uploads/2022/04/Ecosystem-Guide-April-2022.pdf"
       target="_blank"
       rel="noopener"
-      >Weaver</a>to my core and committed to<a href="https://create.nyu.edu/cogscidiy/" target="_blank" rel="noopener">fostering</a>
+      >Weaver</a>to my core and committed to<a href="https://create.nyu.edu/cogscidiy/about.html" target="_blank" rel="noopener">fostering</a>
       <a href="https://docs.google.com/presentation/d/1Y0awbZV4GOCnW-fH4Ls7q_gpGkb5QUaKW40CBcKTTE8/edit?slide=id.p#slide=id.p" target="_blank" rel="noopener">inclusive AI</a><a href="https://docs.google.com/presentation/d/1IZ889fnGPOsdOHee9eArs8hfRm19TX5HDsNPGn7Tebc/edit?slide=id.g337cf7c6c86_0_310#slide=id.g337cf7c6c86_0_310" target="_blank" rel="noopener">development</a>.</p>
 
       
@@ -65,7 +65,7 @@ import IconContact from './icons/IconContact.vue'
       target="_blank"
       rel="noopener"
       >LinkedIn</a>profile to learn more about the work that I do.
-    <br/>Feel free to reach out via email to request an up-to-date <a href="sarakc.github.io/public/cv.pdf">resume | C.V.</a>in .pdf format.</p>
+    <br/>Feel free to reach out via email to request an up-to-date <a href="https://drive.google.com/file/d/1BUUyuZYboO4Nw3QWShLGkA3OKFiMpNax/view?usp=sharing">resume | C.V.</a>in .pdf format.</p>
   </WelcomeItem>
 
   <WelcomeItem>
