@@ -86,7 +86,10 @@ import IconContact from './icons/IconContact.vue'
       rel="noopener"
       >LinkedIn</a>   
       <img alt="github" class="icon" src="@/assets/github.svg"/><a href="https://github.com/sarakc" target="_blank" rel="noopener">GitHub</a><br />
-      ✉️  <a href="mailto:court.22@osu.edu">court DOT 22 AT osu DOT edu</a></p>
+      ✉️  <a href="mailto:court.22@osu.edu">court DOT 22 AT osu DOT edu</a>
+      <a href="https://github.com/sarakc/sarakc.github.io">source code (git)</a>
+      
+    </p>
   </WelcomeItem> 
 </div>
 </template>
