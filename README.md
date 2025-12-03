@@ -1,3 +1,3 @@
-<sarakc.github.io>
+<a href="https://sarakc.github.io">sarakc.github.io</a>
 
 Thanks for visiting my website! I built it to teach myself some frontend dev skills. It's not perfect, but it's a start. I welcome any feedback or suggestions for improvement!
