@@ -11,7 +11,7 @@ import IconContact from './icons/IconContact.vue'
     <img alt="Colors" class="logo" src="@/assets/montana.jpg" />
     <div class="wrapper">
       <div class="greetings">
-    <h1><a href="https://github.com/sarakc/sarakc.github.io" target="_blank" rel="noopener">Sara Court</a></h1>
+    <h1>Sara Court</h1>
       <span class="title">PhD Research Scientist</span><br>
       <span class="subtitle">Department of Linguistics,<br>The Ohio State University</span>
       </div>
@@ -212,11 +212,6 @@ header {
   h1 {
   font-weight: 600;
   font-size: 2.5rem;
-}
-
-h1 a {
-  font-weight: 600; /* Keep the bold style from h1 */
-  color: rgb(41, 169, 255); /* Keep the link color */
 }
 h3 {
   font-size: 1.2rem;
