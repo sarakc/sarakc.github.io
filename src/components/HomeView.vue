@@ -213,6 +213,11 @@ header {
   font-weight: 600;
   font-size: 2.5rem;
 }
+
+h1 a {
+  font-weight: 600; /* Keep the bold style from h1 */
+  color: rgb(41, 169, 255); /* Keep the link color */
+}
 h3 {
   font-size: 1.2rem;
   font-weight: 600;
