@@ -66,7 +66,7 @@ import brutus from '@/assets/osu-brutus.jpg'
       target="_blank"
       rel="noopener"
       >LinkedIn</a>profile to learn more about the work that I do.
-    <br/>Feel free to reach out via email to request an up-to-date<a href="https://drive.google.com/file/d/1Db15Z1lhJlMwvToTUYHfRPQ7OGmyyKNE/view?usp=sharing">resume | C.V.</a>in .pdf format.</p>
+    <br/>My<a href="/cv.pdf" target="_blank" rel="noopener">resume | C.V.</a>is available in .pdf format.</p>
   </WelcomeItem>
 
   <WelcomeItem>
