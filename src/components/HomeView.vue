@@ -4,6 +4,7 @@ import IconAbout from './icons/IconAbout.vue'
 import IconBrainNetwork from './icons/IconBrainNetwork.vue'
 import PythonIcon from './icons/IconPython.vue'
 import IconContact from './icons/IconContact.vue'
+import brutus from '@/assets/osu-brutus.jpg'
 </script>
 
 <template>
@@ -29,7 +30,7 @@ import IconContact from './icons/IconContact.vue'
     
     <p>I'm currently a
     <a href="https://linguistics.osu.edu/people/court.22" target="_blank" rel="noopener">PhD Candidate</a>in the
-    <a href="https://linguistics.osu.edu/" target="_blank" rel="noopener">Linguistics Department</a>at<a href="https://cdn.chatsports.com/cache/f3/ee/f3ee9035fc978b1afbdc594e28741653-original.jpg" target="_blank" rel="noopener">The Ohio State University.</a><a href="https://linguistics.osu.edu/people/elsner.14" target="_blank" rel="noopener">
+    <a href="https://linguistics.osu.edu/" target="_blank" rel="noopener">Linguistics Department</a>at<a :href="brutus" target="_blank" rel="noopener">The Ohio State University.</a><a href="https://linguistics.osu.edu/people/elsner.14" target="_blank" rel="noopener">
     <br/>Micha Elsner</a>is my advisor. I'm a<a
       href="https://buildingmovement.org/wp-content/uploads/2022/04/Ecosystem-Guide-April-2022.pdf"
       target="_blank"
