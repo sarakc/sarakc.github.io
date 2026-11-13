@@ -35,7 +35,7 @@ import brutus from '@/assets/osu-brutus.jpg'
       href="https://buildingmovement.org/wp-content/uploads/2022/04/Ecosystem-Guide-April-2022.pdf"
       target="_blank"
       rel="noopener"
-      >Weaver</a>to my core and committed to<a href="https://create.nyu.edu/cogscidiy/about.html" target="_blank" rel="noopener">fostering</a>
+      >Weaver</a>to my core and <a href="https://aclanthology.org/2026.findings-acl.1779/" target="_blank" rel="noopener">committed</a> to<a href="https://create.nyu.edu/cogscidiy/about.html" target="_blank" rel="noopener">fostering</a>
       <a href="https://docs.google.com/presentation/d/1Y0awbZV4GOCnW-fH4Ls7q_gpGkb5QUaKW40CBcKTTE8/edit?slide=id.p#slide=id.p" target="_blank" rel="noopener">inclusive AI</a><a href="https://docs.google.com/presentation/d/1IZ889fnGPOsdOHee9eArs8hfRm19TX5HDsNPGn7Tebc/edit?slide=id.g337cf7c6c86_0_310#slide=id.g337cf7c6c86_0_310" target="_blank" rel="noopener">development.</a></p>
 
       
@@ -47,7 +47,7 @@ import brutus from '@/assets/osu-brutus.jpg'
     </template>
     <template #heading>Research</template>
     
-    <p>I'm a<a href="https://aclanthology.org/2020.coling-main.258/" target="_blank" rel="noopener">computational morphologist,</a>among <a href="https://www.researchgate.net/doi/10.13140/RG.2.2.35880.43528" target="_blank" rel="noopener">other things.</a>
+    <p>I'm a<a href="https://aclanthology.org/2020.coling-main.258/" target="_blank" rel="noopener">computational morphologist,</a>among <a href="https://arxiv.org/pdf/2611.09785" target="_blank" rel="noopener">other things.</a>
     I build and analyze<a href="https://aclanthology.org/2022.sigmorphon-1.22/" target="_blank" rel="noopener">models</a>for typologically diverse<a href="https://aclanthology.org/2023.scil-1.4.pdf" target="_blank" rel="noopener">languages in contact</a>and other <a href="https://docs.google.com/presentation/d/1iHJTTw4V7vCU4mJeAJWkUTKetmbyZOQHkHvWieAblMA/edit?slide=id.g337cf7c6c86_0_310#slide=id.g337cf7c6c86_0_310" target="_blank" rel="noopener">low-resource domains</a>with applications in<a href="https://aclanthology.org/2024.wmt-1.125/" target="_blank" rel="noopener">responsible machine translation</a>and tools for<a href="https://aclanthology.org/2022.computel-1.20/" target="_blank" rel="noopener">collaborative data annotation.</a></p>
   </WelcomeItem>
 
