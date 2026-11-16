@@ -3,7 +3,8 @@ name: Sync cookbook from Google Docs
 on:
   workflow_dispatch:
   schedule:
-    - cron: '17 9 * * *'
+    # Weekly, Mondays 09:17 UTC; run it by hand after a big edit.
+    - cron: '17 9 * * 1'
 
 permissions:
   contents: write
