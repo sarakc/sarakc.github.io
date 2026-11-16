@@ -7,6 +7,7 @@ import { fileURLToPath } from 'node:url'
 
 const DOC_ID = process.env.COOKBOOK_GOOGLE_DOC_ID || '1E37jt7xVR03ubV2S69WDvYcHJcGBFYgHc4MaCnQkpqc'
 const SOURCE_URL = `https://docs.google.com/document/d/${DOC_ID}/export?format=html`
+const FINDER_URL = '../warm_kitchen_finder.html'
 const SOURCE_EDIT_URL = `https://docs.google.com/document/d/${DOC_ID}/edit`
 const scriptPath = fileURLToPath(import.meta.url)
 const scriptDir = dirname(scriptPath)
@@ -197,7 +198,9 @@ const html = `<!doctype html>
     .eyebrow { margin: 0 0 6px; color: var(--accent); font: 600 10px/1 var(--label); letter-spacing: .2em; text-transform: uppercase; }
     .toc-title { margin: 0; font: 300 34px/1.05 var(--display); }
     .toc-subtitle { margin: 9px 0 0; color: var(--muted); font-size: 14px; line-height: 1.4; }
-    .search-wrap { position: relative; margin: 24px 0 22px; }
+    .finder-link { display: flex; align-items: center; gap: 8px; min-height: 40px; margin-top: 18px; padding: 0 12px; border: 1px solid var(--line); border-radius: 6px; color: var(--accent-ink); font: 600 11px/1 var(--label); letter-spacing: .08em; text-transform: uppercase; text-decoration: none; transition: background .15s, border-color .15s; }
+    .finder-link:hover { background: var(--wash); border-color: var(--accent); }
+    .search-wrap { position: relative; margin: 14px 0 22px; }
     .search-wrap svg { position: absolute; left: 12px; top: 50%; width: 17px; height: 17px; transform: translateY(-50%); color: var(--faint); pointer-events: none; }
     .search-input { width: 100%; min-height: 44px; padding: 10px 36px 10px 38px; border: 1px solid var(--line); border-radius: 6px; background: var(--paper); font: 500 13px/1.3 var(--label); }
     .search-input::placeholder { color: var(--faint); }
@@ -271,8 +274,8 @@ const html = `<!doctype html>
     #cookbook-content table { width: 100%; border-collapse: collapse; margin: 22px 0 32px; font-size: 16px; }
     #cookbook-content th, #cookbook-content td { padding: 10px 12px; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; }
     #cookbook-content th { font: 600 11px/1.25 var(--label); letter-spacing: .08em; text-transform: uppercase; }
-    .reader-footer { display: flex; justify-content: flex-end; padding: 22px clamp(24px, 5vw, 56px); border-top: 1px solid var(--line); background: var(--surface); }
-    .back-to-top { min-height: 44px; display: inline-flex; align-items: center; gap: 8px; border: 0; background: transparent; color: var(--faint); font: 600 10px/1 var(--label); letter-spacing: .12em; text-transform: uppercase; }
+    .reader-footer { display: flex; justify-content: space-between; gap: 16px; padding: 22px clamp(24px, 5vw, 56px); border-top: 1px solid var(--line); background: var(--surface); }
+    .back-to-top { min-height: 44px; display: inline-flex; align-items: center; gap: 8px; border: 0; text-decoration: none; background: transparent; color: var(--faint); font: 600 10px/1 var(--label); letter-spacing: .12em; text-transform: uppercase; }
     .back-to-top:hover { color: var(--accent-ink); }
 
     .toast { position: fixed; z-index: 100; left: 50%; bottom: 24px; transform: translate(-50%, 14px); padding: 10px 14px; border: 1px solid var(--line); border-radius: 5px; background: var(--surface); box-shadow: 0 8px 24px rgba(60,40,25,.12); color: var(--muted); font: 500 12px/1 var(--label); opacity: 0; pointer-events: none; transition: opacity .18s, transform .18s; }
@@ -283,7 +286,11 @@ const html = `<!doctype html>
       html { scroll-padding-top: 76px; }
       .progress-track { left: 0; top: 68px; }
       .mobile-bar { position: sticky; z-index: 50; top: 0; min-height: 68px; display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 16px; border-bottom: 1px solid var(--line); background: rgba(255,255,255,.96); backdrop-filter: blur(8px); }
-      .mobile-title { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font: 400 19px/1 var(--display); }
+      .mobile-actions { display: inline-flex; gap: 8px; flex: none; }
+      .mobile-bar .menu-button, .mobile-bar .menu-button svg { flex: none; }
+      .mobile-actions a.menu-button { color: var(--accent-ink); text-decoration: none; }
+      .mobile-title { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font: 400 19px/1 var(--display); }
+      @media (max-width: 420px) { .mobile-title { visibility: hidden; } }
       .menu-button { min-width: 44px; min-height: 44px; display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 0 12px; border: 1px solid var(--line); border-radius: 5px; background: var(--surface); color: var(--muted); font: 600 11px/1 var(--label); letter-spacing: .06em; text-transform: uppercase; }
       .menu-scrim { position: fixed; z-index: 64; inset: 0; display: block; background: rgba(43,36,32,.3); opacity: 0; pointer-events: none; transition: opacity .18s; }
       .toc-rail { width: min(88vw, 360px); transform: translateX(-102%); box-shadow: 10px 0 30px rgba(43,36,32,.12); transition: transform .2s ease; }
@@ -330,7 +337,10 @@ const html = `<!doctype html>
   <header class="mobile-bar">
     <button class="menu-button" id="menu-open" type="button" aria-controls="contents" aria-expanded="false">${menuIcon()}<span>Contents</span></button>
     <span class="mobile-title">The Warm Kitchen</span>
-    <button class="menu-button" id="mobile-search" type="button" aria-label="Search the cookbook">${searchIcon()}</button>
+    <span class="mobile-actions">
+      <a class="menu-button" href="${FINDER_URL}" aria-label="Back to the Recipe Finder">Finder</a>
+      <button class="menu-button" id="mobile-search" type="button" aria-label="Search the cookbook">${searchIcon()}</button>
+    </span>
   </header>
 
   <div class="menu-scrim" id="menu-scrim" aria-hidden="true"></div>
@@ -341,6 +351,7 @@ const html = `<!doctype html>
         <p class="eyebrow">The Warm Kitchen</p>
         <p class="toc-title">Cookbook</p>
         <p class="toc-subtitle">${taggedRecipeCount} recipes · ${recipes.length} indexed sections</p>
+        <a class="finder-link" href="${FINDER_URL}"><span aria-hidden="true">←</span> Recipe Finder</a>
       </header>
 
       <div class="search-wrap">
@@ -375,6 +386,7 @@ const html = `<!doctype html>
       <div id="cookbook-content">${sourceBody}</div>
     </article>
     <footer class="reader-footer">
+      <a class="back-to-top" href="${FINDER_URL}"><span aria-hidden="true">←</span> Recipe Finder</a>
       <button class="back-to-top" id="back-to-top" type="button">Back to top ${arrowIcon()}</button>
     </footer>
   </main>
