@@ -42,6 +42,7 @@ let sourceBody = bodyMatch[1]
   .replace(/<(?:iframe|object|embed)\b[^>]*>[\s\S]*?<\/(?:iframe|object|embed)>/gi, '')
   .replace(/\son[a-z]+\s*=\s*(?:"[^"]*"|'[^']*')/gi, '')
   .replace(/<p[^>]*>(?:\s|&nbsp;|<span[^>]*>\s*<\/span>)*<\/p>/gi, '')
+sourceBody = applyEmphasisClasses(sourceBody, docEmphasisClasses(styleMatch[1]))
 
 const generatorSource = await readFile(scriptPath, 'utf8')
 const sourceHash = createHash('sha256').update(sourceBody).update('\0').update(generatorSource).digest('hex')
@@ -115,11 +116,15 @@ sourceBody = sourceBody.replace(headingPattern, (whole, tag, attributes, innerHt
   }
 
   const recipe = recipes[recipeIndex++]
-  const tagHtml = recipe.tags.length
-    ? `<span class="job-tags" aria-label="Recipe jobs">${recipe.tags.map((tagName) => `<span class="job-tag tag-${tagName.toLowerCase()}">${tagName}</span>`).join('')}</span>`
-    : ''
+  const tagHtml = jobTagsHtml(recipe.tags)
 
-  return `<h2${attributes}><span class="recipe-heading-text">${escapeHtml(recipe.title)}</span>${tagHtml}<button class="copy-link" type="button" data-copy-id="${escapeHtml(id)}" aria-label="Copy link to ${escapeHtml(recipe.title)}" title="Copy recipe link">${linkIcon()}</button></h2>`
+  return `<h2${attributes}><span class="recipe-heading-text">${escapeHtml(recipe.title)}</span><button class="copy-link" type="button" data-copy-id="${escapeHtml(id)}" aria-label="Copy link to ${escapeHtml(recipe.title)}" title="Copy recipe link">${linkIcon()}</button>${tagHtml}</h2>`
+})
+
+sourceBody = sourceBody.replace(/<h3\b([^>]*)>([\s\S]*?)<\/h3>/gi, (whole, attributes, innerHtml) => {
+  const { title, tags } = splitRecipeHeading(cleanText(innerHtml))
+  if (!tags.length) return whole
+  return `<h3${attributes}><span class="recipe-heading-text">${escapeHtml(title)}</span>${jobTagsHtml(tags)}</h3>`
 })
 
 const chapterNav = chapters.map((chapter) => {
@@ -145,7 +150,6 @@ const html = `<!doctype html>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;1,9..144,400&amp;family=Inter:wght@500;600&amp;family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&amp;display=swap" rel="stylesheet">
-  <style id="google-doc-styles">${styleMatch[1]}</style>
   <style>
     :root {
       --paper: #fbf8f3;
@@ -223,15 +227,15 @@ const html = `<!doctype html>
     #cookbook-content > * { max-width: 100%; }
     #cookbook-content p { margin: 0 0 1em; padding: 0 !important; text-indent: 0 !important; }
     #cookbook-content p.title { margin: 0 0 12px; color: var(--ink); font: 300 clamp(48px, 8vw, 76px)/.98 var(--display); letter-spacing: -.025em; }
-    #cookbook-content p.subtitle { margin: 0 0 96px; max-width: 680px; color: var(--muted); font: italic 400 clamp(19px, 2.4vw, 25px)/1.45 var(--display); }
+    #cookbook-content p.subtitle { margin: 0 0 96px; max-width: 680px; color: var(--muted); font: italic 400 clamp(19px, 2.4vw, 24px)/1.5 var(--body); }
     #cookbook-content h1 { display: block; margin: 104px 0 36px; padding: 0 0 18px; border-bottom: 1px solid var(--line); color: var(--ink); font: 300 clamp(38px, 5vw, 58px)/1.08 var(--display); letter-spacing: -.015em; scroll-margin-top: 34px; }
     #cookbook-content h1:first-of-type { margin-top: 0; }
     #cookbook-content h1[data-chapter] { display: flex; flex-direction: column; gap: 10px; }
     .chapter-kicker { color: var(--accent); font: 600 11px/1 var(--label); letter-spacing: .18em; text-transform: uppercase; }
     .chapter-title { display: block; }
-    #cookbook-content h2 { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin: 76px 0 24px; padding: 28px 0 0; border-top: 1px solid var(--line); color: var(--ink); font: 400 clamp(28px, 4vw, 38px)/1.16 var(--display); letter-spacing: -.01em; scroll-margin-top: 34px; }
-    .recipe-heading-text { margin-right: auto; }
-    .job-tags { display: inline-flex; flex-wrap: wrap; gap: 5px; align-items: center; }
+    #cookbook-content h2 { display: block; margin: 72px 0 22px; padding: 28px 0 0; border-top: 1px solid var(--line); color: var(--ink); font: 400 clamp(27px, 3.4vw, 34px)/1.18 var(--display); letter-spacing: -.01em; scroll-margin-top: 34px; }
+    .recipe-heading-text { margin-right: 4px; }
+    .job-tags { display: flex; flex-wrap: wrap; gap: 5px; align-items: center; margin-top: 12px; }
     .job-tag { padding: 5px 7px 4px; border-radius: 3px; font: 600 9px/1 var(--label); letter-spacing: .12em; text-transform: uppercase; }
     .tag-warm { color: var(--t-warm); background: var(--t-warm-bg); }
     .tag-oil { color: var(--t-oil); background: var(--t-oil-bg); }
@@ -239,12 +243,20 @@ const html = `<!doctype html>
     .tag-blood { color: var(--t-blood); background: var(--t-blood-bg); }
     .tag-phlegm { color: var(--t-phlegm); background: var(--t-phlegm-bg); }
     .tag-calm { color: var(--t-calm); background: var(--t-calm-bg); }
-    .copy-link { display: inline-grid; place-items: center; width: 38px; height: 38px; margin-left: 2px; padding: 0; border: 0; border-radius: 4px; background: transparent; color: var(--faint); opacity: 0; transition: color .15s, background .15s, opacity .15s; }
+    .copy-link { display: inline-grid; place-items: center; width: 38px; height: 38px; margin: -4px 0 0; padding: 0; border: 0; vertical-align: middle; border-radius: 4px; background: transparent; color: var(--faint); opacity: 0; transition: color .15s, background .15s, opacity .15s; }
     #cookbook-content h2:hover .copy-link, .copy-link:focus-visible { opacity: 1; }
     .copy-link:hover { color: var(--accent-ink); background: var(--wash); }
     .copy-link svg { width: 17px; height: 17px; }
-    #cookbook-content h3 { margin: 44px 0 14px; color: var(--ink); font: 400 24px/1.2 var(--display); }
-    #cookbook-content strong, #cookbook-content b { font-weight: 600; }
+    #cookbook-content h3 { margin: 40px 0 14px; color: var(--ink); font: 400 23px/1.25 var(--display); }
+    #cookbook-content h3 .job-tags { margin-top: 10px; }
+    #cookbook-content .index-entry { font-size: 16px; line-height: 1.75; color: var(--muted); }
+    #cookbook-content .index-entry .b { color: var(--ink); font: 600 11px/1 var(--label); letter-spacing: .12em; text-transform: uppercase; }
+    #cookbook-content strong, #cookbook-content b, #cookbook-content .b { font-weight: 600; }
+    #cookbook-content .i { font-style: italic; }
+    #cookbook-content .u { text-decoration: underline; }
+    #cookbook-content .s { text-decoration: line-through; }
+    #cookbook-content .super { vertical-align: super; font-size: .75em; }
+    #cookbook-content .sub { vertical-align: sub; font-size: .75em; }
     #cookbook-content em, #cookbook-content i { font-style: italic; }
     #cookbook-content ul, #cookbook-content ol { margin: 12px 0 26px !important; padding-left: 1.35em !important; }
     #cookbook-content ul { list-style: disc outside !important; }
@@ -252,7 +264,9 @@ const html = `<!doctype html>
     #cookbook-content li { margin: 0 0 9px !important; padding: 0 0 0 5px !important; color: var(--ink); }
     #cookbook-content li::before { content: none !important; }
     #cookbook-content a { color: var(--accent-ink); text-underline-offset: 3px; }
-    #cookbook-content .why-note, #cookbook-content .next-day-note { margin: 24px 0 28px !important; padding: 18px 20px !important; border-left: 3px solid var(--accent); background: var(--wash); color: var(--muted); font-style: italic; }
+    #cookbook-content .why-note, #cookbook-content .next-day-note { margin: 24px 0 28px !important; padding: 16px 20px !important; border-left: 3px solid var(--accent); border-radius: 0 6px 6px 0; background: var(--wash); color: var(--muted); font-size: 17px; line-height: 1.6; }
+    #cookbook-content .why-note { font-style: italic; }
+    #cookbook-content .next-day-note { border-left-color: var(--good); }
     #cookbook-content .why-note strong, #cookbook-content .next-day-note strong { color: var(--accent-ink); font: 600 10px/1 var(--label); letter-spacing: .12em; text-transform: uppercase; }
     #cookbook-content table { width: 100%; border-collapse: collapse; margin: 22px 0 32px; font-size: 16px; }
     #cookbook-content th, #cookbook-content td { padding: 10px 12px; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; }
@@ -290,7 +304,7 @@ const html = `<!doctype html>
       #cookbook-content { font-size: 17px; line-height: 1.64; }
       #cookbook-content p.title { font-size: 48px; }
       #cookbook-content h1 { margin-top: 82px; font-size: 38px; }
-      #cookbook-content h2 { margin-top: 62px; font-size: 29px; }
+      #cookbook-content h2 { margin-top: 58px; font-size: 26px; }
       .job-tags { order: 3; width: 100%; }
       .copy-link { margin-left: auto; }
     }
@@ -404,7 +418,7 @@ const html = `<!doctype html>
       });
     });
 
-    const normalized = (value) => value.toLocaleLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+    const normalized = (value) => value.toLocaleLowerCase().normalize('NFD').replace(/[\\u0300-\\u036f]/g, '');
 
     function renderSearch() {
       const query = normalized(searchInput.value.trim());
@@ -445,8 +459,15 @@ const html = `<!doctype html>
 
     document.querySelectorAll('#cookbook-content p').forEach((paragraph) => {
       const text = paragraph.textContent.trim();
-      if (/^why\b/i.test(text)) paragraph.classList.add('why-note');
-      if (/^next day\b/i.test(text)) paragraph.classList.add('next-day-note');
+      if (/^why\\b/i.test(text)) paragraph.classList.add('why-note');
+      if (/^next day\\b/i.test(text)) paragraph.classList.add('next-day-note');
+    });
+
+    document.querySelectorAll('#cookbook-content h1').forEach((heading) => {
+      if (!/^index\\b/i.test(heading.textContent.trim())) return;
+      for (let node = heading.nextElementSibling; node && node.tagName !== 'H1'; node = node.nextElementSibling) {
+        if (node.tagName === 'P') node.classList.add('index-entry');
+      }
     });
 
     function updateProgress() {
@@ -498,6 +519,39 @@ const html = `<!doctype html>
 await mkdir(dirname(outputPath), { recursive: true })
 await writeFile(outputPath, html)
 console.log(`Updated ${outputPath} from Google Docs (${taggedRecipeCount} recipes; ${recipes.length} indexed sections).`)
+
+// Google Docs exports Arial/11pt/line-height 1.15 on positional .cN classes, which would override
+// the book's type. Drop the doc stylesheet and keep only inline emphasis, as stable classes.
+function docEmphasisClasses(css) {
+  const emphasis = new Map()
+  for (const [, selector, body] of css.matchAll(/([^{}]+)\{([^}]*)\}/g)) {
+    const name = selector.trim().match(/^\.(c\d+)$/)?.[1]
+    if (!name) continue
+    const flags = []
+    for (const declaration of body.split(';')) {
+      const [property = '', value = ''] = declaration.split(':').map((part) => part.trim().toLowerCase())
+      if (property === 'font-weight' && Number(value) >= 600) flags.push('b')
+      if (property === 'font-style' && value === 'italic') flags.push('i')
+      if (property === 'text-decoration' && value.includes('underline')) flags.push('u')
+      if (property === 'text-decoration' && value.includes('line-through')) flags.push('s')
+      if (property === 'vertical-align' && (value === 'super' || value === 'sub')) flags.push(value)
+    }
+    if (flags.length) emphasis.set(name, flags)
+  }
+  return emphasis
+}
+
+function applyEmphasisClasses(html, emphasis) {
+  return html.replace(/<span class="([^"]*)"/g, (whole, classes) => {
+    const flags = [...new Set(classes.split(/\s+/).flatMap((name) => emphasis.get(name) || []))]
+    return flags.length ? `<span class="${classes} ${flags.join(' ')}"` : whole
+  })
+}
+
+function jobTagsHtml(tags) {
+  if (!tags.length) return ''
+  return `<span class="job-tags" aria-label="Recipe jobs">${tags.map((tagName) => `<span class="job-tag tag-${tagName.toLowerCase()}">${tagName}</span>`).join('')}</span>`
+}
 
 function splitRecipeHeading(value) {
   const [name, tagText = ''] = value.split(/\s+—\s+/, 2)
