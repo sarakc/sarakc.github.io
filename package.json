@@ -5,11 +5,18 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint"
+    "lint": "vue-cli-service lint",
+    "check-items": "node scripts/check-items.mjs",
+    "add-item": "open tools/add-item.html || xdg-open tools/add-item.html",
+    "check-graph": "node scripts/check-graph.mjs",
+    "check-threads": "node scripts/check-threads.mjs",
+    "build-similarity": "node scripts/build-threads-similarity.mjs"
   },
   "dependencies": {
     "core-js": "^3.8.3",
-    "vue": "^3.2.13"
+    "d3-force": "^3.0.0",
+    "vue": "^3.2.13",
+    "vue-router": "^4.2.5"
   },
   "devDependencies": {
     "@babel/core": "^7.12.16",
@@ -31,6 +38,12 @@
     ],
     "parserOptions": {
       "parser": "@babel/eslint-parser"
+    },
+    "globals": {
+      "defineProps": "readonly",
+      "defineEmits": "readonly",
+      "defineExpose": "readonly",
+      "withDefaults": "readonly"
     },
     "rules": {}
   },

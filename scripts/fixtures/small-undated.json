@@ -1,0 +1,10 @@
+{
+  "items": [
+    { "id": "fixture-book-a", "type": "book", "title": "Fixture Book A", "creator": "Author One", "tags": ["fixture-topic"], "genres": ["essay"] },
+    { "id": "fixture-book-b", "type": "book", "title": "Fixture Book B", "creator": "Author Two", "tags": ["fixture-topic"] },
+    { "id": "fixture-album", "type": "music", "title": "Fixture Album", "creator": "Artist One", "genres": ["ambient"] },
+    { "id": "fixture-podcast", "type": "podcast", "title": "Fixture Podcast · Ëpisode", "creator": "Host One", "tags": ["fixture-topic"] },
+    { "id": "fixture-video", "type": "video", "title": "Fixture Video", "creator": "Maker One", "tags": ["other-topic"] },
+    { "id": "fixture-post", "type": "post", "title": "Fixture Post", "creator": "Writer One", "tags": ["other-topic"] }
+  ]
+}

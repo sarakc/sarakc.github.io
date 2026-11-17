@@ -1,2 +1,13 @@
 node_modules
 .DS_Store
+
+# Build output. The deploy workflow builds dist/ itself and publishes it,
+# so it never belongs in the repo.
+dist/
+
+# Local working material: drafts, reference images, design-tool state and
+# planning notes. None of it is part of the site.
+drafts/
+inspiration/
+.superdesign/
+docs/superpowers/

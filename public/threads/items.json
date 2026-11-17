@@ -1,0 +1,1009 @@
+{
+  "about": "Research atlas candidates, drafted from public/cv.pdf on 2026-11-15. Every paper, talk, poster, thesis, course and service role is its own item. `project` groups items that present the same work; it is a similarity signal, not a merge. Fields were filled only where the CV states them; check `project`, `languages` and `methods` before promoting. Preview: npm run serve, then #/threads?preview=research. Rebuild similarity after edits: npm run build-similarity -- drafts/threads-research.json",
+  "tags": {
+    "primary": [
+      "morphology",
+      "analogy",
+      "language-contact",
+      "machine-translation",
+      "llms",
+      "mechanistic-interpretability",
+      "low-resource",
+      "responsible-ai",
+      "language-documentation"
+    ]
+  },
+  "items": [
+    {
+      "id": "wu-court-elsner-lexical-conflicts",
+      "type": "paper",
+      "mine": true,
+      "title": "Are These Programmers Ripe Enough to Eat? Evaluating How LLMs Handle Lexical Knowledge Conflicts in Translation",
+      "creator": "Dongxu Wu, Sara Court, and Micha Elsner",
+      "people": [
+        "Dongxu Wu",
+        "Micha Elsner"
+      ],
+      "venue": "under review",
+      "year": 2026,
+      "url": "https://arxiv.org/abs/2611.09785",
+      "project": "lexical-conflicts",
+      "tags": [
+        "machine-translation",
+        "llms",
+        "evaluation",
+        "knowledge-conflicts",
+        "lexical-semantics",
+        "lexicon"
+      ],
+      "methods": [
+        "llm-evaluation"
+      ],
+      "community": [
+        "computational-linguistics"
+      ],
+      "added": "2026-11-15"
+    },
+    {
+      "id": "elsner-et-al-virtue-of-critical-thinking",
+      "type": "paper",
+      "mine": true,
+      "title": "The Virtue of Critical Thinking: Popular Science Discourses of “Your Brain on AI”",
+      "creator": "Micha Elsner, Sara Court, Galey Modan, Emily Sagasser, and Lauren Squires",
+      "people": [
+        "Micha Elsner",
+        "Galey Modan",
+        "Emily Sagasser",
+        "Lauren Squires"
+      ],
+      "venue": "under review",
+      "year": 2026,
+      "project": "ai-discourse",
+      "tags": [
+        "llms",
+        "responsible-ai",
+        "ai-discourse",
+        "ai-literacy"
+      ],
+      "methods": [
+        "discourse-analysis"
+      ],
+      "community": [
+        "sociolinguistics"
+      ],
+      "added": "2026-11-15"
+    },
+    {
+      "id": "court-downing-elsner-emergency-contexts",
+      "type": "paper",
+      "mine": true,
+      "title": "LLMs in the Real World: Evaluating “AI” in Emergency Contexts",
+      "creator": "Sara Court, Lara Downing, and Micha Elsner",
+      "people": [
+        "Lara Downing",
+        "Micha Elsner"
+      ],
+      "venue": "Findings of ACL",
+      "place": "San Diego, CA",
+      "year": 2026,
+      "url": "https://aclanthology.org/2026.findings-acl.1779/",
+      "project": "emergency-llms",
+      "tags": [
+        "llms",
+        "evaluation",
+        "responsible-ai",
+        "crisis-response",
+        "failure-analysis"
+      ],
+      "methods": [
+        "llm-evaluation",
+        "failure-mode-analysis"
+      ],
+      "community": [
+        "computational-linguistics"
+      ],
+      "added": "2026-11-15"
+    },
+    {
+      "id": "court-elsner-low-resource-translation",
+      "type": "paper",
+      "mine": true,
+      "title": "Shortcomings of LLMs for Low-Resource Translation: Retrieval and Understanding Are Both the Problem",
+      "creator": "Sara Court and Micha Elsner",
+      "people": [
+        "Micha Elsner"
+      ],
+      "venue": "WMT",
+      "place": "Miami, FL",
+      "year": 2024,
+      "url": "https://aclanthology.org/2024.wmt-1.125/",
+      "project": "low-resource-translation",
+      "tags": [
+        "machine-translation",
+        "llms",
+        "low-resource",
+        "retrieval",
+        "evaluation",
+        "failure-analysis"
+      ],
+      "methods": [
+        "retrieval",
+        "llm-evaluation"
+      ],
+      "community": [
+        "computational-linguistics"
+      ],
+      "added": "2026-11-15",
+      "languages": [
+        "southern-quechua",
+        "spanish"
+      ]
+    },
+    {
+      "id": "court-sims-elsner-analogy-in-contact",
+      "type": "paper",
+      "mine": true,
+      "title": "Analogy in Contact: Modeling Maltese Plural Inflection",
+      "creator": "Sara Court, Andrea D. Sims, and Micha Elsner",
+      "people": [
+        "Andrea D. Sims",
+        "Micha Elsner"
+      ],
+      "venue": "SCiL",
+      "place": "Amherst, MA",
+      "year": 2023,
+      "url": "https://aclanthology.org/2023.scil-1.4/",
+      "project": "maltese-plurals",
+      "tags": [
+        "morphology",
+        "inflection",
+        "analogy",
+        "language-contact",
+        "borrowing"
+      ],
+      "languages": [
+        "maltese"
+      ],
+      "methods": [
+        "computational-modeling"
+      ],
+      "community": [
+        "computational-linguistics"
+      ],
+      "added": "2026-11-15"
+    },
+    {
+      "id": "elsner-court-analogical-inflection",
+      "type": "paper",
+      "mine": true,
+      "title": "OSU at SIGMORPHON 2022: Analogical Inflection With Rule Features",
+      "creator": "Micha Elsner and Sara Court",
+      "people": [
+        "Micha Elsner"
+      ],
+      "venue": "SIGMORPHON",
+      "place": "Seattle, WA",
+      "year": 2022,
+      "url": "https://aclanthology.org/2022.sigmorphon-1.22/",
+      "project": "analogical-inflection",
+      "tags": [
+        "morphology",
+        "inflection",
+        "analogy",
+        "word-and-paradigm"
+      ],
+      "methods": [
+        "neural-models",
+        "computational-modeling"
+      ],
+      "community": [
+        "computational-linguistics",
+        "morphology"
+      ],
+      "added": "2026-11-15"
+    },
+    {
+      "id": "copot-et-al-fieldwork-annotation",
+      "type": "paper",
+      "mine": true,
+      "title": "A Word-and-Paradigm Workflow for Fieldwork Annotation",
+      "creator": "Maria Copot, Sara Court, Noah Diewald, Stephanie Antetomaso, and Micha Elsner",
+      "people": [
+        "Maria Copot",
+        "Noah Diewald",
+        "Stephanie Antetomaso",
+        "Micha Elsner"
+      ],
+      "venue": "ComputEL",
+      "place": "Dublin, Ireland",
+      "year": 2022,
+      "url": "https://aclanthology.org/2022.computel-1.20/",
+      "project": "fieldwork-annotation",
+      "tags": [
+        "morphology",
+        "word-and-paradigm",
+        "language-documentation",
+        "fieldwork",
+        "annotation",
+        "low-resource"
+      ],
+      "methods": [
+        "annotation-workflows",
+        "human-in-the-loop"
+      ],
+      "community": [
+        "computational-linguistics",
+        "language-documentation"
+      ],
+      "added": "2026-11-15"
+    },
+    {
+      "id": "tseng-et-al-affixoid-behavior",
+      "type": "paper",
+      "mine": true,
+      "title": "Computational Modeling of Affixoid Behavior in Chinese Morphology",
+      "creator": "Yu-Hsiang Tseng, Shu-Kai Hsieh, Pei-Yi Chen, and Sara Court",
+      "people": [
+        "Yu-Hsiang Tseng",
+        "Shu-Kai Hsieh",
+        "Pei-Yi Chen"
+      ],
+      "venue": "COLING",
+      "place": "Barcelona, Spain (online)",
+      "year": 2020,
+      "url": "https://aclanthology.org/2020.coling-main.258/",
+      "project": "chinese-affixoids",
+      "tags": [
+        "morphology",
+        "word-formation",
+        "lexicon"
+      ],
+      "languages": [
+        "mandarin"
+      ],
+      "methods": [
+        "computational-modeling"
+      ],
+      "community": [
+        "computational-linguistics"
+      ],
+      "added": "2026-11-15"
+    },
+    {
+      "id": "court-dissertation",
+      "type": "thesis",
+      "title": "Responsible Applications of LLMs in Low-Resource Domains",
+      "creator": "Sara Court · Ph.D. dissertation, advised by Micha Elsner",
+      "people": [
+        "Micha Elsner"
+      ],
+      "venue": "Ph.D. dissertation, The Ohio State University",
+      "venueShort": "Ph.D. dissertation",
+      "year": 2027,
+      "project": "dissertation",
+      "tags": [
+        "machine-translation",
+        "llms",
+        "low-resource",
+        "retrieval",
+        "evaluation",
+        "knowledge-conflicts",
+        "failure-analysis",
+        "mechanistic-interpretability",
+        "morphology",
+        "word-and-paradigm",
+        "lexicon",
+        "responsible-ai",
+        "community-governance"
+      ],
+      "methods": [
+        "retrieval-augmented-generation",
+        "paradigm-retrieval",
+        "llm-evaluation",
+        "ablation-studies",
+        "sparse-autoencoders",
+        "activation-steering",
+        "activation-patching",
+        "attention-knockouts",
+        "logit-lens"
+      ],
+      "community": [
+        "computational-linguistics",
+        "machine-translation",
+        "interpretability"
+      ],
+      "note": "An open-source RAG pipeline that augments LLM outputs with community-sourced materials and linguistically informed databases, so speaker communities can define their own language standards and deploy systems independently of major AI providers.",
+      "added": "2026-11-15",
+      "languages": [
+        "maltese",
+        "southern-quechua"
+      ]
+    },
+    {
+      "id": "paper-evidence-augmented-mt",
+      "type": "paper",
+      "mine": true,
+      "title": "When and Why Evidence-Augmented LLM Translation Fails: Ablations across Methods, Models and Languages",
+      "creator": "Sara Court and Micha Elsner",
+      "people": [
+        "Micha Elsner"
+      ],
+      "venue": "in progress",
+      "added": "2026-11-16",
+      "project": "dissertation",
+      "tags": [
+        "machine-translation",
+        "llms",
+        "low-resource",
+        "retrieval",
+        "knowledge-conflicts",
+        "failure-analysis",
+        "evaluation",
+        "mechanistic-interpretability",
+        "lexicon"
+      ],
+      "methods": [
+        "retrieval-augmented-generation",
+        "llm-evaluation",
+        "ablation-studies",
+        "sparse-autoencoders",
+        "activation-steering",
+        "activation-patching",
+        "attention-knockouts",
+        "logit-lens",
+        "paradigm-retrieval"
+      ],
+      "languages": [
+        "maltese"
+      ],
+      "community": [
+        "computational-linguistics",
+        "interpretability"
+      ]
+    },
+    {
+      "id": "court-honors-thesis",
+      "type": "thesis",
+      "title": "Bilingual Processing of Number Agreement in English, Spanish, and Arabic",
+      "creator": "Sara Court · B.A. honors thesis",
+      "venue": "B.A. honors thesis, University of Florida",
+      "venueShort": "B.A. honors thesis",
+      "year": 2013,
+      "project": "bilingual-agreement",
+      "tags": [
+        "psycholinguistics",
+        "multilingualism",
+        "agreement"
+      ],
+      "languages": [
+        "english",
+        "spanish",
+        "arabic"
+      ],
+      "methods": [
+        "eye-tracking",
+        "self-paced-reading"
+      ],
+      "community": [
+        "psycholinguistics"
+      ],
+      "added": "2026-11-15"
+    },
+    {
+      "id": "talk-2026-acl-emergency",
+      "type": "poster",
+      "title": "LLMs in the Real World: Evaluating “AI” in Emergency Contexts",
+      "creator": "Court, Downing, and Elsner",
+      "people": [
+        "Lara Downing",
+        "Micha Elsner"
+      ],
+      "venue": "ACL",
+      "place": "San Diego, CA",
+      "year": 2026,
+      "project": "emergency-llms",
+      "tags": [
+        "llms",
+        "evaluation",
+        "responsible-ai",
+        "crisis-response",
+        "failure-analysis"
+      ],
+      "community": [
+        "computational-linguistics"
+      ],
+      "added": "2026-11-15",
+      "methods": [
+        "llm-evaluation",
+        "failure-mode-analysis"
+      ]
+    },
+    {
+      "id": "talk-2026-alt-lexical-conditioning",
+      "type": "talk",
+      "title": "When Is Inflection Lexically Conditioned? Towards a Discovery Method and Cross-linguistic Comparison",
+      "creator": "Elsner, Court, and Sims · presented by co-author",
+      "people": [
+        "Micha Elsner",
+        "Andrea D. Sims"
+      ],
+      "venue": "ALT",
+      "place": "Lyon, France",
+      "year": 2026,
+      "project": "lexical-conditioning",
+      "tags": [
+        "morphology",
+        "inflection",
+        "typology",
+        "lexicon"
+      ],
+      "methods": [
+        "computational-modeling"
+      ],
+      "community": [
+        "morphology",
+        "typology"
+      ],
+      "added": "2026-11-15"
+    },
+    {
+      "id": "talk-2026-tsukuba-responsible-llms",
+      "type": "talk",
+      "title": "Responsible Applications of LLMs for Low-Resource Languages",
+      "creator": "Sara Court · invited talk",
+      "venue": "University of Tsukuba",
+      "place": "Tsukuba, Japan",
+      "year": 2026,
+      "project": "dissertation",
+      "tags": [
+        "llms",
+        "low-resource",
+        "responsible-ai",
+        "machine-translation",
+        "community-governance"
+      ],
+      "community": [
+        "ai-ethics"
+      ],
+      "added": "2026-11-15"
+    },
+    {
+      "id": "talk-2026-tsukuba-emergency",
+      "type": "talk",
+      "title": "LLMs in the Real World: Evaluating “AI” in Emergency Contexts",
+      "creator": "Sara Court · invited talk",
+      "venue": "University of Tsukuba",
+      "place": "Tsukuba, Japan",
+      "year": 2026,
+      "project": "emergency-llms",
+      "tags": [
+        "llms",
+        "evaluation",
+        "responsible-ai",
+        "crisis-response",
+        "failure-analysis"
+      ],
+      "community": [
+        "ai-ethics"
+      ],
+      "added": "2026-11-15",
+      "methods": [
+        "llm-evaluation",
+        "failure-mode-analysis"
+      ]
+    },
+    {
+      "id": "talk-2025-melt-low-resource-translation",
+      "type": "poster",
+      "title": "Shortcomings of LLMs for Low-Resource Translation: Retrieval and Understanding Are Both the Problem",
+      "creator": "Court and Elsner",
+      "people": [
+        "Micha Elsner"
+      ],
+      "venue": "MELT @ COLM",
+      "place": "Montreal, Canada",
+      "year": 2025,
+      "project": "low-resource-translation",
+      "tags": [
+        "machine-translation",
+        "llms",
+        "low-resource",
+        "retrieval",
+        "evaluation",
+        "failure-analysis"
+      ],
+      "community": [
+        "computational-linguistics"
+      ],
+      "added": "2026-11-15",
+      "languages": [
+        "southern-quechua",
+        "spanish"
+      ],
+      "methods": [
+        "retrieval",
+        "llm-evaluation"
+      ]
+    },
+    {
+      "id": "talk-2025-malta-responsible-translation",
+      "type": "talk",
+      "title": "Responsible Applications of LLMs for Low-Resource Translation",
+      "creator": "Sara Court · invited talk",
+      "venue": "University of Malta",
+      "place": "Malta",
+      "year": 2025,
+      "tags": [
+        "machine-translation",
+        "llms",
+        "low-resource",
+        "responsible-ai",
+        "community-governance"
+      ],
+      "community": [
+        "computational-linguistics"
+      ],
+      "added": "2026-11-15",
+      "languages": [
+        "maltese"
+      ],
+      "project": "dissertation"
+    },
+    {
+      "id": "talk-2024-wmt-low-resource-translation",
+      "type": "poster",
+      "title": "Shortcomings of LLMs for Low-Resource Translation: Retrieval and Understanding Are Both the Problem",
+      "creator": "Court and Elsner",
+      "people": [
+        "Micha Elsner"
+      ],
+      "venue": "WMT @ EMNLP",
+      "place": "Miami, FL",
+      "year": 2024,
+      "project": "low-resource-translation",
+      "tags": [
+        "machine-translation",
+        "llms",
+        "low-resource",
+        "retrieval",
+        "evaluation",
+        "failure-analysis"
+      ],
+      "community": [
+        "computational-linguistics"
+      ],
+      "added": "2026-11-15",
+      "languages": [
+        "southern-quechua",
+        "spanish"
+      ],
+      "methods": [
+        "retrieval",
+        "llm-evaluation"
+      ]
+    },
+    {
+      "id": "talk-2024-aida-maltese-plurals",
+      "type": "talk",
+      "title": "A Unified Account of Maltese Nominal Plural Inflection in Contact",
+      "creator": "Court, Sims, and Elsner",
+      "people": [
+        "Andrea D. Sims",
+        "Micha Elsner"
+      ],
+      "venue": "AIDA 15",
+      "place": "University of Malta",
+      "year": 2024,
+      "project": "maltese-plurals",
+      "tags": [
+        "morphology",
+        "inflection",
+        "analogy",
+        "language-contact",
+        "borrowing"
+      ],
+      "languages": [
+        "maltese"
+      ],
+      "community": [
+        "arabic-dialectology"
+      ],
+      "added": "2026-11-15"
+    },
+    {
+      "id": "talk-2023-ghilm-maltese-integration",
+      "type": "talk",
+      "title": "Quantifying Factors Shaping the Morphological Integration of Non-Semitic Nouns in Maltese",
+      "creator": "Court, Elsner, and Sims",
+      "people": [
+        "Micha Elsner",
+        "Andrea D. Sims"
+      ],
+      "venue": "GĦILM 8",
+      "place": "University of Bremen",
+      "year": 2023,
+      "project": "maltese-plurals",
+      "tags": [
+        "morphology",
+        "inflection",
+        "language-contact",
+        "borrowing"
+      ],
+      "languages": [
+        "maltese"
+      ],
+      "methods": [
+        "computational-modeling"
+      ],
+      "community": [
+        "maltese-linguistics"
+      ],
+      "added": "2026-11-15"
+    },
+    {
+      "id": "talk-2023-scil-analogy-in-contact",
+      "type": "poster",
+      "title": "Analogy in Contact: Modeling Maltese Plural Inflection",
+      "creator": "Court, Sims, and Elsner",
+      "people": [
+        "Andrea D. Sims",
+        "Micha Elsner"
+      ],
+      "venue": "SCiL",
+      "place": "Amherst, MA",
+      "year": 2023,
+      "project": "maltese-plurals",
+      "tags": [
+        "morphology",
+        "inflection",
+        "analogy",
+        "language-contact",
+        "borrowing",
+        "mutual-information"
+      ],
+      "languages": [
+        "maltese"
+      ],
+      "community": [
+        "computational-linguistics"
+      ],
+      "added": "2026-11-15",
+      "methods": [
+        "computational-modeling"
+      ]
+    },
+    {
+      "id": "talk-2023-bln-quantifying-analogy",
+      "type": "poster",
+      "title": "Quantifying Analogy in Contact: Maltese Plural Inflection",
+      "creator": "Court, Sims, and Elsner",
+      "people": [
+        "Andrea D. Sims",
+        "Micha Elsner"
+      ],
+      "venue": "Buckeye Language Network",
+      "place": "Columbus, OH",
+      "year": 2023,
+      "project": "maltese-plurals",
+      "tags": [
+        "morphology",
+        "inflection",
+        "analogy",
+        "language-contact",
+        "borrowing"
+      ],
+      "languages": [
+        "maltese"
+      ],
+      "community": [
+        "cognitive-science"
+      ],
+      "added": "2026-11-15"
+    },
+    {
+      "id": "talk-2023-helsinki-underdocumented-tools",
+      "type": "talk",
+      "title": "Rethinking Tools for the Morphosyntactic Analysis of Underdocumented Languages",
+      "creator": "Sara Court and Maria Copot · invited talk",
+      "people": [
+        "Maria Copot"
+      ],
+      "venue": "University of Helsinki",
+      "place": "Helsinki, Finland",
+      "year": 2023,
+      "project": "fieldwork-annotation",
+      "tags": [
+        "morphology",
+        "annotation",
+        "language-documentation",
+        "low-resource"
+      ],
+      "community": [
+        "language-documentation"
+      ],
+      "added": "2026-11-15"
+    },
+    {
+      "id": "talk-2022-ldna-community-annotation",
+      "type": "talk",
+      "title": "A Community-Centered Workflow for Morphological Annotation",
+      "creator": "Court, Copot, Diewald, Antetomaso, and Elsner · presented by co-author",
+      "people": [
+        "Maria Copot",
+        "Noah Diewald",
+        "Stephanie Antetomaso",
+        "Micha Elsner"
+      ],
+      "venue": "LD&A",
+      "place": "Berlin, Germany",
+      "year": 2022,
+      "project": "fieldwork-annotation",
+      "tags": [
+        "morphology",
+        "word-and-paradigm",
+        "annotation",
+        "fieldwork",
+        "language-documentation",
+        "community-governance"
+      ],
+      "community": [
+        "language-documentation"
+      ],
+      "added": "2026-11-15"
+    },
+    {
+      "id": "talk-2022-imm-maltese-restructuring",
+      "type": "talk",
+      "title": "Quantifying Factors Shaping Analogical Restructuring of the Maltese Nominal System",
+      "creator": "Court, Elsner, and Sims",
+      "people": [
+        "Micha Elsner",
+        "Andrea D. Sims"
+      ],
+      "venue": "IMM20",
+      "place": "Budapest, Hungary",
+      "year": 2022,
+      "project": "maltese-plurals",
+      "tags": [
+        "morphology",
+        "inflection",
+        "analogy",
+        "language-contact"
+      ],
+      "languages": [
+        "maltese"
+      ],
+      "community": [
+        "morphology"
+      ],
+      "added": "2026-11-15"
+    },
+    {
+      "id": "talk-2022-computel-fieldwork-annotation",
+      "type": "talk",
+      "title": "A Word-and-Paradigm Workflow for Fieldwork Annotation",
+      "creator": "Copot, Court, Diewald, Antetomaso, and Elsner",
+      "people": [
+        "Maria Copot",
+        "Noah Diewald",
+        "Stephanie Antetomaso",
+        "Micha Elsner"
+      ],
+      "venue": "ComputEL-5 @ ACL",
+      "place": "Dublin, Ireland",
+      "year": 2022,
+      "project": "fieldwork-annotation",
+      "tags": [
+        "morphology",
+        "word-and-paradigm",
+        "language-documentation",
+        "fieldwork",
+        "annotation",
+        "low-resource"
+      ],
+      "community": [
+        "computational-linguistics",
+        "language-documentation"
+      ],
+      "added": "2026-11-15",
+      "methods": [
+        "annotation-workflows",
+        "human-in-the-loop"
+      ]
+    },
+    {
+      "id": "talk-2022-mmm-maltese-organization",
+      "type": "talk",
+      "title": "Quantifying Factors Shaping Inflectional Organization in Maltese",
+      "creator": "Court, Elsner, and Sims",
+      "people": [
+        "Micha Elsner",
+        "Andrea D. Sims"
+      ],
+      "venue": "MMM13",
+      "place": "Rhodes, Greece",
+      "year": 2022,
+      "project": "maltese-plurals",
+      "tags": [
+        "morphology",
+        "inflection",
+        "analogy",
+        "language-contact"
+      ],
+      "languages": [
+        "maltese"
+      ],
+      "community": [
+        "morphology"
+      ],
+      "added": "2026-11-15"
+    },
+    {
+      "id": "talk-2020-coling-affixoid",
+      "type": "talk",
+      "title": "Computational Modeling of Affixoid Behavior in Chinese Morphology",
+      "creator": "Tseng, Hsieh, Chen, and Court · presented by co-author",
+      "people": [
+        "Yu-Hsiang Tseng",
+        "Shu-Kai Hsieh",
+        "Pei-Yi Chen"
+      ],
+      "venue": "COLING",
+      "place": "Barcelona, Spain (online)",
+      "year": 2020,
+      "project": "chinese-affixoids",
+      "tags": [
+        "morphology",
+        "word-formation",
+        "lexicon"
+      ],
+      "languages": [
+        "mandarin"
+      ],
+      "community": [
+        "computational-linguistics"
+      ],
+      "added": "2026-11-15"
+    },
+    {
+      "id": "talk-2025-cosi-ai-basics",
+      "type": "talk",
+      "title": "AI Basics for High Schoolers",
+      "creator": "Sara Court · invited talk",
+      "venue": "COSI Language Pod",
+      "place": "Columbus, OH",
+      "year": 2025,
+      "project": "ai-literacy",
+      "tags": [
+        "ai-literacy",
+        "outreach",
+        "llms",
+        "teaching"
+      ],
+      "community": [
+        "outreach"
+      ],
+      "added": "2026-11-15"
+    },
+    {
+      "id": "talk-2024-cfhf-women-in-ai",
+      "type": "talk",
+      "title": "Women in AI & Tech",
+      "creator": "Sara Court · invited talk",
+      "venue": "Center for Healthy Families",
+      "place": "Columbus, OH",
+      "year": 2024,
+      "project": "ai-literacy",
+      "tags": [
+        "ai-literacy",
+        "outreach"
+      ],
+      "community": [
+        "outreach"
+      ],
+      "added": "2026-11-15"
+    },
+    {
+      "id": "talk-2014-uf-innet",
+      "type": "talk",
+      "title": "Advances in Language Documentation Technologies and the INNET Project",
+      "creator": "Sara Court · invited talk",
+      "venue": "University of Florida",
+      "place": "Gainesville, FL",
+      "year": 2014,
+      "project": "innet",
+      "tags": [
+        "language-documentation",
+        "endangered-languages",
+        "archiving"
+      ],
+      "community": [
+        "language-documentation"
+      ],
+      "added": "2026-11-15"
+    },
+    {
+      "id": "course-ling-3803-ethics",
+      "type": "course",
+      "title": "LING 3803: Ethics of Language Technology",
+      "creator": "Sara Court · instructor and course designer",
+      "venue": "The Ohio State University",
+      "year": 2027,
+      "project": "ethics-teaching",
+      "tags": [
+        "teaching",
+        "responsible-ai",
+        "ai-literacy",
+        "llms"
+      ],
+      "community": [
+        "ai-ethics"
+      ],
+      "added": "2026-11-15"
+    },
+    {
+      "id": "project-cogscidiy",
+      "type": "project",
+      "title": "CogSciDIY: Language Science Outreach for High School Students",
+      "creator": "Sara Court · curriculum, web interface, statistics instruction",
+      "venue": "The Ohio State University",
+      "year": 2021,
+      "project": "cogscidiy",
+      "tags": [
+        "outreach",
+        "teaching",
+        "statistics"
+      ],
+      "community": [
+        "outreach"
+      ],
+      "note": "A semester-long program for about 50 high school students in Columbus and New York. Year is an estimate; the CV does not date it.",
+      "added": "2026-11-15"
+    },
+    {
+      "id": "service-2025-cdt-quechua-moderation",
+      "type": "service",
+      "title": "Roundtable on Content Moderation in Quechua Communities",
+      "creator": "Sara Court · invited scientist",
+      "venue": "Center for Democracy & Technology",
+      "venueShort": "CDT",
+      "year": 2025,
+      "project": "quechua-moderation",
+      "tags": [
+        "responsible-ai",
+        "low-resource",
+        "content-moderation",
+        "community-governance"
+      ],
+      "languages": [
+        "southern-quechua"
+      ],
+      "community": [
+        "ai-ethics",
+        "policy"
+      ],
+      "note": "One of about twenty scholars giving input on fairness, accountability and transparency of AI content moderation for low-resource languages of the Global South. Findings informed two CDT reports.",
+      "added": "2026-11-15"
+    },
+    {
+      "id": "fellowship-2013-innet",
+      "type": "project",
+      "title": "INNET: Infrastructure for Endangered Languages Research Fellowship",
+      "creator": "Sara Court · CLARIN ERIC and European Commission fellow",
+      "venue": "University of Cologne & Max Planck Institute for Psycholinguistics",
+      "venueShort": "Cologne & MPI",
+      "year": 2013,
+      "project": "innet",
+      "tags": [
+        "language-documentation",
+        "endangered-languages",
+        "archiving",
+        "low-resource"
+      ],
+      "community": [
+        "language-documentation"
+      ],
+      "added": "2026-11-15"
+    }
+  ]
+}

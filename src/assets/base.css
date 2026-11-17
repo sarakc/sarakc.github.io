@@ -1,4 +1,67 @@
-/* color palette from <https://github.com/vuejs/theme> */
+/* ============================================================
+   site tokens — single source of truth for palette + type.
+   One set for the whole site: the home page and /threads draw
+   from the same ground, ink and accent.
+   ============================================================ */
+:root {
+  /* white-and-blue theme */
+  --page-bg: #ffffff;
+  --page-bg-soft: #fcfdfe;
+  --page-ink: #2c3e50;
+  --page-dim: #7a8896;
+  --accent-blue: #29a9ff;
+  --sky-blue: #4a8cc7;
+  --cool-hairline: rgba(44, 62, 80, 0.13);
+  --cool-hairline-soft: rgba(44, 62, 80, 0.07);
+
+  /* page width — the one knob for how wide the site sits on screen.
+     bigger = fills more of the screen. `none` = edge to edge.
+     --page-gutter is the breathing room between content and window edge. */
+  --page-max: 1600px;
+  --page-gutter: clamp(1.5rem, 4vw, 4rem);
+
+  /* type. --page-sans is the stack `body` has always used, so /threads
+     and the home page now set text identically. --page-serif is reserved
+     for item titles on /threads — the one place a serif still earns its
+     keep. There is deliberately no mono stack any more. */
+  --page-sans: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, sans-serif;
+  --page-serif: Newsreader, Georgia, "Times New Roman", serif;
+}
+
+/* ============================================================
+   /threads — type colors. Looked up dynamically as
+   var(--t-<item.type>), so adding a token here is how a new item
+   type gets its color. Keep the names in sync with KNOWN_TYPES
+   in scripts/check-items.mjs.
+   ============================================================ */
+:root {
+  /* hue = form, shade = type. Two types sharing a form share a hue, so
+     the dots group by how you take the thing in before you read a label. */
+
+  /* read */
+  --t-book: #f2c744;
+  --t-paper: #c99a1e;
+
+  /* listen */
+  --t-podcast: #b49ae4;
+  --t-music: #7f5fc4;
+
+  /* watch */
+  --t-video: #4f9bd1;
+  --t-film: #2e6fae;
+
+  /* look */
+  --t-art: #5fc48c;
+
+  /* post */
+  --t-post: #ff7a66;
+}
+
+/* ============================================================
+   legacy Vue scaffold tokens — used by the existing HomeView
+   styles. left in place to avoid an unrelated refactor.
+   ============================================================ */
 :root {
   --vt-c-white: #ffffff;
   --vt-c-white-soft: #f8f8f8;
@@ -19,10 +82,7 @@
   --vt-c-text-light-2: rgba(60, 60, 60, 0.66);
   --vt-c-text-dark-1: var(--vt-c-white);
   --vt-c-text-dark-2: rgba(235, 235, 235, 0.64);
-}
 
-/* semantic color variables for this project */
-:root {
   --color-background: var(--vt-c-white);
   --color-background-soft: var(--vt-c-white-soft);
   --color-background-mute: var(--vt-c-white-mute);

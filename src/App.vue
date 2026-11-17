@@ -1,25 +1,53 @@
 <template>
-  <HomeView msg="Welcome to Your Vue.js App!!"/>
+  <nav class="site-nav">
+    <router-link v-if="$route.name === 'threads'" to="/" class="back">← website</router-link>
+    <router-link v-else to="/" exact-active-class="is-active">home</router-link>
+    <a href="/cv.pdf" target="_blank" rel="noopener">cv</a>
+    <ThreadsGlyph v-if="$route.name !== 'threads'" />
+  </nav>
+  <router-view />
 </template>
 
 <script>
-import HomeView from './components/HomeView.vue'
+import ThreadsGlyph from './components/threads/ThreadsGlyph.vue'
 
 export default {
   name: 'App',
-  components: {
-    HomeView
-  }
+  components: { ThreadsGlyph },
 }
 </script>
 
 <style>
-#app {
+.site-nav {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 18px;
+  max-width: var(--page-max);
+  margin: 0 auto;
+  padding: 14px var(--page-gutter) 0;
   font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+  font-size: 13px;
+  letter-spacing: 0.02em;
+}
+.site-nav a {
+  color: var(--page-ink);
+  opacity: 0.6;
+  text-decoration: none;
+  transition: color 0.15s, opacity 0.15s;
+}
+.site-nav a:hover {
+  color: var(--accent-blue);
+  opacity: 1;
+}
+/* The door to Threads: the menu's own opacity, blue on touch. */
+.site-nav .threads-glyph { opacity: 0.6; transition: opacity 0.15s; }
+.site-nav .threads-glyph:hover,
+.site-nav .threads-glyph:focus-visible { opacity: 1; }
+/* On /threads the way home sits at the left of the same line as cv. */
+.site-nav a.back { margin-right: auto; }
+.site-nav a.is-active {
+  color: var(--accent-blue);
+  opacity: 1;
 }
 </style>
