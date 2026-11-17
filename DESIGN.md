@@ -163,6 +163,19 @@ link away. It must hold for a 1962 novel, an album or a podcast as well as a
   analogy, language contact, machine translation, LLMs, mechanistic
   interpretability, low-resource, responsible AI, language documentation).
   The current paper is its own node, "in progress" in place of a year.
+- **The list reads like the CV (2026-11-17).** `cvGroups` (cvgroups.mjs)
+  sorts Sara's own work under the CV's sections in the CV's order —
+  education, research experience, publications, invited talks, conference
+  presentations, teaching, leadership, policy & service — newest first, work
+  in progress leading with "in progress" after its title in place of a year.
+  A talk is invited when it says `invited: true` or its byline says
+  "invited". Things beyond the CV follow in groups by kind (books, music, …).
+  Group names are small dim sans, lowercase like the rest of the page.
+- **The home page is one window, menu included (2026-11-17).** The menu bar
+  added with /threads sat above a page that was already 100vh tall, so home
+  scrolled by the menu's 41px. `#app` is a full-height column on home and the
+  page takes what the menu leaves (App.vue). On phones the content is taller
+  than the screen and still scrolls.
 - **No timeline (2026-11-17).** The year pull and the faint first/last year
   marks are gone; layout is similarity alone. `check-graph` asserts that
   changing every year moves nothing.

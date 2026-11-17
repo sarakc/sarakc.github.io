@@ -2,7 +2,7 @@
 /* One row of the list: year and title. Opening it shows who made it, what it
    is, the link and the note — the same detail the graph shows on click. */
 import { computed } from 'vue'
-import { detailMeta } from './types.mjs'
+import { detailMeta, isMine } from './types.mjs'
 import { labelVenue } from './graph.mjs'
 
 const props = defineProps({
@@ -14,9 +14,12 @@ const props = defineProps({
 
 defineEmits(['toggle'])
 
-/* Publication year if there is one, otherwise the year it was added. */
+/* Publication year if there is one. Sara's own work with no year yet is in
+   progress: no year, and its venue ("in progress") follows the title. A
+   thing beyond the CV with no year shows the year it was added. */
 const year = computed(() => {
   if (props.item.year) return props.item.year
+  if (isMine(props.item)) return ''
   const m = /^(\d{4})-/.exec(props.item.added || '')
   return m ? m[1] : ''
 })
@@ -29,7 +32,7 @@ const meta = computed(() => detailMeta({ ...props.item, year: undefined }))
   <article class="row" :class="{ open }">
     <button type="button" :aria-expanded="open" @click="$emit('toggle', item.id)">
       <span class="year">{{ year }}</span>
-      <span class="title">{{ item.title }}<span v-if="showVenue && item.venue" class="venue">{{ labelVenue(item) }}</span></span>
+      <span class="title">{{ item.title }}<span v-if="(showVenue || !year) && item.venue" class="venue">{{ labelVenue(item) }}</span></span>
     </button>
     <div v-if="open" class="more">
       <p class="meta">

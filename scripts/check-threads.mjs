@@ -125,6 +125,26 @@ await section('orbits', async () => {
   check('28 works step 10, 18, 28', JSON.stringify(levelCounts(28)) === '[10,18,28]')
 })
 
+await section('list groups', async () => {
+  const { cvGroups, isInvited } = await import('../src/components/threads/cvgroups.mjs')
+  const g = cvGroups([
+    { id: 'p1', type: 'paper', mine: true, title: 'a', year: 2020 },
+    { id: 'p2', type: 'paper', mine: true, title: 'b' },
+    { id: 'p3', type: 'paper', mine: true, title: 'c', year: 2024 },
+    { id: 't1', type: 'talk', title: 'd', year: 2023, creator: 'Sara Court · invited talk' },
+    { id: 't2', type: 'talk', title: 'e', year: 2025 },
+    { id: 'th', type: 'thesis', title: 'f', year: 2013 },
+    { id: 'b1', type: 'book', title: 'g', year: 1999 },
+    { id: 'm1', type: 'music', title: 'h' },
+  ])
+  check('CV sections in CV order, then other kinds', JSON.stringify(g.map(x => x.id)) ===
+    '["education","publications","invited","presentations","kind-book","kind-music"]', JSON.stringify(g.map(x => x.id)))
+  check('newest first, in progress leading', JSON.stringify(g[1].items.map(i => i.id)) === '["p2","p3","p1"]')
+  check('an invited talk is told by its byline', isInvited({ creator: 'Sara Court · invited talk' }) && !isInvited({ creator: 'Court and Elsner' }))
+  check('invited: false wins over the byline', !isInvited({ invited: false, creator: 'invited talk' }))
+  check('empty collection, no groups', cvGroups([]).length === 0)
+})
+
 await section('camera', async () => {
   const { frameCamera } = await import('../src/components/threads/camera.mjs')
   const base = { size: { w: 1000, h: 600 }, fitK: 0.5, maxK: 1.6 }

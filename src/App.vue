@@ -46,6 +46,19 @@ export default {
 .site-nav .threads-glyph:focus-visible { opacity: 1; }
 /* On /threads the way home sits at the left of the same line as cv. */
 .site-nav a.back { margin-right: auto; }
+/* The home page is one window tall, menu included: the page takes what the
+   menu leaves, so there is never a scroll bar when the content fits. */
+@supports selector(:has(a)) {
+  #app:has(> .home-page) {
+    min-height: 100vh;
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+  }
+  #app:has(> .home-page) > * { width: 100%; }
+  #app:has(> .home-page) > .site-nav { flex: none; }
+  #app:has(> .home-page) > .home-page { flex: 1 0 auto; min-height: 0; }
+}
 .site-nav a.is-active {
   color: var(--accent-blue);
   opacity: 1;

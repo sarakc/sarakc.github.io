@@ -10,6 +10,7 @@ import { describeReasons } from './threads/similarity.mjs'
 import { findOrbits, splitWorks, titleKey } from './threads/orbits.mjs'
 import { orderTags } from './threads/tags.mjs'
 import { isMine } from './threads/types.mjs'
+import { cvGroups } from './threads/cvgroups.mjs'
 
 /* "Ink" (decided 2026-11-15): no heading, no counts, no type cards, no rail.
    One line of topic words, the graph, and one line of detail under it that
@@ -183,6 +184,8 @@ const repeatedTitles = computed(() => {
 const filtered = computed(() =>
   realmItems.value.filter(i => !activeTag.value || (i.tags || []).includes(activeTag.value))
 )
+/* The list reads like the CV: its sections in its order, newest first. */
+const listGroups = computed(() => cvGroups(filtered.value))
 
 /* A talk or poster with its paper's title orbits the paper: the graph lays
    out works, and draws each work's satellites around it (orbits.mjs). Which
@@ -361,15 +364,18 @@ function toggleRow(id) {
     </section>
 
     <section v-if="isNarrow || view === 'list'" class="listing">
-      <ItemCard
-        v-for="item in filtered"
-        :key="item.id"
-        :data-id="item.id"
-        :item="item"
-        :show-venue="repeatedTitles.has(titleKey(item.title))"
-        :open="item.id === selectedId"
-        @toggle="toggleRow"
-      />
+      <section v-for="group in listGroups" :key="group.id" class="group" :aria-labelledby="`group-${group.id}`">
+        <h2 :id="`group-${group.id}`" class="group-name">{{ group.label }}</h2>
+        <ItemCard
+          v-for="item in group.items"
+          :key="item.id"
+          :data-id="item.id"
+          :item="item"
+          :show-venue="repeatedTitles.has(titleKey(item.title))"
+          :open="item.id === selectedId"
+          @toggle="toggleRow"
+        />
+      </section>
       <p v-if="filtered.length === 0" class="empty">nothing here yet</p>
     </section>
   </div>
@@ -496,7 +502,18 @@ function toggleRow(id) {
 .find:focus-visible { outline: 1px solid var(--accent-blue); outline-offset: 1px; }
 .canvas > :first-child { flex: 1; min-height: 0; }
 
-.listing { margin-top: 24px; border-top: 1px solid var(--cool-hairline); }
+.listing { margin-top: 8px; }
+.group-name {
+  margin: 0;
+  padding: 36px 0 10px;
+  border-bottom: 1px solid var(--cool-hairline);
+  font-family: var(--page-sans);
+  font-size: 12.5px;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  color: var(--page-dim);
+}
+.group:first-child .group-name { padding-top: 16px; }
 
 .empty {
   font-family: var(--page-sans);
@@ -510,6 +527,7 @@ function toggleRow(id) {
   .threads-page { padding: 32px var(--page-gutter) 90px; }
   .preview-notice { display: block; }
   .preview-notice a { display: block; margin-top: 4px; }
-  .listing { margin-top: 16px; }
+  .listing { margin-top: 4px; }
+  .group-name { padding-top: 28px; }
 }
 </style>
