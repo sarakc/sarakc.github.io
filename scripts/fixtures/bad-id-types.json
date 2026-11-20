@@ -1,0 +1,6 @@
+{
+  "items": [
+    { "id": 5, "type": "book", "title": "Numeric Id", "added": "2026-11-20", "tags": ["fixture-topic"] },
+    { "id": "fixture-numeric-title", "type": "book", "title": 1984, "added": "2026-11-20", "tags": ["fixture-topic"] }
+  ]
+}

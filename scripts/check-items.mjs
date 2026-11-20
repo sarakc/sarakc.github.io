@@ -47,10 +47,10 @@ if (!items) {
 }
 
 const seenIds = new Set()
-const allIds = new Set(items.map(i => i?.id).filter(Boolean))
+const allIds = new Set(items.map(i => i?.id).filter(id => typeof id === 'string' && id))
 
 for (const [i, item] of items.entries()) {
-  const ref = item?.id ? `[${item.id}]` : `[#${i}]`
+  const ref = typeof item?.id === 'string' && item.id ? `[${item.id}]` : `[#${i}]`
 
   for (const field of REQUIRED) {
     if (item[field] === undefined || item[field] === null || item[field] === '') {
@@ -58,7 +58,15 @@ for (const [i, item] of items.entries()) {
     }
   }
 
-  if (item.id) {
+  /* The page sorts and joins on these; a number (id 5, title 1984) would pass
+     the regex and the required check, then crash the layout. */
+  for (const field of ['id', 'title']) {
+    if (item[field] !== undefined && item[field] !== null && typeof item[field] !== 'string') {
+      err(ref, `${field} must be a string, not ${typeof item[field]} ${JSON.stringify(item[field])}`)
+    }
+  }
+
+  if (typeof item.id === 'string' && item.id) {
     if (!ID_RE.test(item.id)) err(ref, `id "${item.id}" must be kebab-case (lowercase, digits, hyphens)`)
     if (seenIds.has(item.id)) err(ref, `duplicate id "${item.id}"`)
     seenIds.add(item.id)
@@ -133,7 +141,7 @@ console.log(`checked ${items.length} items`)
 
 /* Not a warning: which talks and posters the graph draws orbiting their
    paper, so a title edit that makes or breaks one is visible. */
-const orbits = findOrbits(items.filter(i => i && i.id && i.type && i.title))
+const orbits = findOrbits(items.filter(i => i && typeof i.id === 'string' && i.id && i.type && typeof i.title === 'string' && i.title))
 if (orbits.size) {
   console.log(`\n${orbits.size} orbit${orbits.size === 1 ? '' : 's'}:`)
   for (const [sat, parent] of orbits) console.log(`  ↳ ${sat} orbits ${parent}`)

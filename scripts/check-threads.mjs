@@ -238,6 +238,17 @@ await section('search', async () => {
   check('title matches come first', firstOffTitle === -1 || titled.slice(firstOffTitle).every(i => !/translation/i.test(i.title)), ids(titled).join(', '))
 })
 
+await section('check-items', async () => {
+  const { spawnSync } = await import('node:child_process')
+  const run = file => spawnSync(process.execPath, [resolve(root, 'scripts/check-items.mjs'), resolve(root, file)], { encoding: 'utf8' })
+  const live = run('public/threads/items.json')
+  check('the live collection passes', live.status === 0, live.stdout.split('\n').filter(l => l.includes('✗')).join('; '))
+  /* layoutGraph sorts by id.localeCompare, so a number there crashes the page. */
+  const bad = run('scripts/fixtures/bad-id-types.json')
+  check('a numeric id fails', bad.status === 1 && /\[#0\]: id must be a string/.test(bad.stdout), bad.stdout.trim())
+  check('a numeric title fails', bad.status === 1 && /\[fixture-numeric-title\]: title must be a string/.test(bad.stdout), bad.stdout.trim())
+})
+
 section('tags.mjs — labels and order', () => {
   check('kebab-case reads as words', tagLabel('language-contact') === 'language contact')
   check('acronyms keep their capitals', tagLabel('responsible-ai') === 'responsible AI' && tagLabel('llms') === 'LLMs')
