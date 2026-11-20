@@ -20,14 +20,14 @@ Pass a draft path after `--` to validate a preview collection, for example
 
 | field      | type   | notes                                                                |
 | ---------- | ------ | -------------------------------------------------------------------- |
-| `url`      | string | where it lives on the web, if it lives anywhere. Without one the title is plain text and the detail rail shows no link — fine for a paper book, a conversation, a lecture. |
+| `url`      | string | where it lives on the web, if it lives anywhere. Without one the detail line shows no link — fine for a paper book, a conversation, or a lecture. |
 | `creator`  | string | author / artist / host. Italicized under the title.                  |
-| `year`     | number | four-digit publication or release year: paper publication, album release, film release, and so on — never the year it came into your life. Shown in the graph label, detail rail, and list, and pulls the item gently left (earlier) or right (later) in the graph. |
+| `year`     | number | four-digit publication or release year: paper publication, album release, film release, and so on — never the year it came into your life. Shown in graph labels, detail lines, and the list. It is a weak similarity signal but does not create a time axis or directly position a node. |
 | `mine`     | boolean | your own work. Talks, posters, theses, courses, service and projects are yours unless `mine: false`; papers, books, posts and everything else are things you love unless `mine: true`. Own work is drawn in ink; loved things take their type's colour. |
 | `note`     | string | your one-paragraph reason for including it. The voice that does the actual work — what made this useful, and to whom. |
 | `venue`    | string | short venue or host: `WMT`, `SCiL`, `University of Malta`. Shown after the year in the graph label and in the detail line. |
 | `venueShort` | string | the label form of a long venue (`OSU` for `Ph.D. dissertation, The Ohio State University`). The graph label uses it; the detail line keeps the full `venue`. Without it, a long venue is cut at a word. |
-| `project`  | string or array | kebab-case key shared by every item presenting the same work — a paper, its posters, its talks. A list (`["dissertation", "evidence-augmented-mt"]`) puts an item in more than one; sharing any one key counts. Each stays its own node; a shared key is a strong similarity signal. |
+| `project`  | string or array | kebab-case key shared by every item presenting the same work — a paper, its posters, its talks. A list (`["dissertation", "evidence-augmented-mt"]`) puts an item in more than one; sharing any one key counts. It is a strong similarity signal. A talk or poster whose normalized title exactly matches its paper is still a separate searchable item, but is drawn as a small orbit around the paper rather than as a standalone node. |
 | `people`   | array  | co-authors and collaborators, excluding Sara. Rare names count for more than names on everything. An item that isn't yours and has no `people` counts its `creator` instead, so two albums by one artist sit together. |
 | `languages`| array  | languages the work studies, lowercase kebab-case: `maltese`, `mandarin`, `southern-quechua` (always Southern Quechua, not bare Quechua). |
 | `methods`  | array  | how the work was done, kebab-case: `llm-evaluation`, `computational-modeling`. |
@@ -84,8 +84,9 @@ lists the orbits it finds.
 
 ## Type → color
 
-The colored dot in the list, the node fill in the graph, and the dot in the
-detail rail all come from `type`. Every dot carries a `--page-ink` hairline.
+The colored dot in the list and the node fill in the graph come from `type`.
+Sara's own work is ink; loved things use the type/form colors below. Every
+solid dot carries a subtle `--page-ink` edge.
 
 | form | type | token | value |
 | --- | --- | --- | --- |
@@ -99,15 +100,13 @@ detail rail all come from `type`. Every dot carries a `--page-ink` hairline.
 | post | `post` | `--t-post` | `#ff7a66` |
 
 Hue encodes **form**, shade encodes **type** — two types you take in the same
-way share a hue, so the dots group before you read a single label. The type
-cards under the page heading are the key: one per type present, with its
-count, and clicking one filters to it.
+way share a hue, so the dots group before you read a single label. Size and
+fill encode the tier defined in `types.mjs`; there are no separate type cards.
 
-Add a new type by adding a `--t-<type>` token to the `/threads` block in
-[`src/assets/base.css`](../../src/assets/base.css) and listing it in `TYPES`
-in [`src/components/ThreadsView.vue`](../../src/components/ThreadsView.vue) and
-`KNOWN_TYPES` in `scripts/check-items.mjs`. Nothing else needs touching — the
-components read the token by name.
+Add a new type once in the `TYPES` table in
+[`src/components/threads/types.mjs`](../../src/components/threads/types.mjs).
+Add a `--t-<type>` token in [`src/assets/base.css`](../../src/assets/base.css)
+only when the type needs a color distinct from its form's base hue.
 
 ## Adding items the easy way
 

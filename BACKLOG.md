@@ -4,13 +4,6 @@ Ideas worth doing later, with enough context to pick them up cold. Newest
 first within each section. When one is done, delete it here and record the
 decision in `DESIGN.md`.
 
-## Hosting
-
-### Link Tempo from the home page (noted 2026-11-16)
-
-Tempo is hosted as its own repository (`sarakc/tempo`, at `/tempo/`) but is not linked from
-the home page; add a link if wanted.
-
 ## /threads
 
 ### Abstract embeddings as a similarity signal (noted 2026-11-15)

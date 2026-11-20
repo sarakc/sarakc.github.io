@@ -460,6 +460,10 @@ by GitHub Pages from its `main` root at `https://sarakc.github.io/<repo>/`: `sar
 music viewer `sarakc/music-explorer`. No project commits to this repository's `main` on a
 schedule.
 
+The home page links to Tempo from the Contact block. Decided 2026-11-19: Tempo is the
+maintained fitness/timer app and replaces the archived `workout-app`, so it should be
+reachable from the canonical site rather than only by knowing its URL.
+
 Warm kitchen moved out on 2026-11-19 (`public/warm-kitchen/`,
 `scripts/update-warm-kitchen-cookbook.mjs` and `.github/workflows/sync-cookbook.yml`
 removed here); its URLs are unchanged.
