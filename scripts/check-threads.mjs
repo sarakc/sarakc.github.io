@@ -109,9 +109,10 @@ await section('orbits', async () => {
     split.satellites.get('court-elsner-low-resource-translation')?.map(i => i.id).join() ===
       'talk-2024-wmt-low-resource-translation,talk-2025-melt-low-resource-translation')
   const noWmt = splitWorks(research.filter(i => i.id !== 'court-elsner-low-resource-translation'), orbits)
-  check('a satellite whose paper is filtered out appears nowhere',
-    !noWmt.works.some(i => i.id.includes('low-resource-translation') && i.type === 'poster') &&
-    !noWmt.satellites.has('court-elsner-low-resource-translation'))
+  check('a satellite whose paper is filtered out stands as a work of its own',
+    ['talk-2024-wmt-low-resource-translation', 'talk-2025-melt-low-resource-translation'].every(id => noWmt.works.some(i => i.id === id)) &&
+    !noWmt.satellites.has('court-elsner-low-resource-translation') &&
+    noWmt.works.length === split.works.length - 1 + 2)
   const pts = fanPoints({ x: 0, y: 0, r: 7 }, 3)
   check('fanned copies sit at 2r + 9', pts.length === 3 && pts.every(p => Math.abs(Math.hypot(p.x, p.y) - 23) < 1e-9))
   const gaps = pts.flatMap((p, i) => pts.slice(i + 1).map(q => Math.hypot(p.x - q.x, p.y - q.y)))
@@ -198,8 +199,14 @@ await section('level reveal', async () => {
   check('a small collection has one step', loved.every(i => levelFor(i.id, loved, null, findOrbits(loved)) === 0))
   check('a satellite reveals its paper\'s step',
     levelFor('talk-2024-wmt-low-resource-translation', research, researchPairs, orbits) === 0)
-  check('a satellite whose paper is filtered out gives null', levelFor('talk-2024-wmt-low-resource-translation',
-    research.filter(i => i.id !== 'court-elsner-low-resource-translation'), researchPairs, orbits) === null)
+  const withoutPaper = research.filter(i => i.id !== 'court-elsner-low-resource-translation')
+  check('a satellite whose paper is filtered out reveals its own step', (() => {
+    const lv = levelFor('talk-2024-wmt-low-resource-translation', withoutPaper, researchPairs, orbits)
+    const { works: rest } = splitWorks(withoutPaper, orbits)
+    const at = rankItems(rest, researchPairs).indexOf('talk-2024-wmt-low-resource-translation')
+    return Number.isInteger(lv) && lv === levelCounts(rest.length).findIndex(n => at < n)
+  })())
+  check('an item filtered out gives null', levelFor('court-elsner-low-resource-translation', withoutPaper, researchPairs, orbits) === null)
 })
 
 await section('search', async () => {

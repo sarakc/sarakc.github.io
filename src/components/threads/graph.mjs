@@ -134,12 +134,13 @@ export function levelCounts(n) {
 }
 
 /* The smallest detail step that shows an item — for a satellite, its
-   paper — or null if it isn't among `items`. A link or a search raises the
-   level this far and no further. `orbits` is findOrbits of the whole
-   collection. */
+   paper, or the satellite itself when the paper isn't among `items` — or
+   null if the item isn't among them. A link or a search raises the level
+   this far and no further. `orbits` is findOrbits of the whole collection. */
 export function levelFor(id, items, pairs, orbits) {
-  const target = orbits.get(id) || id
-  if (!items.some(i => i.id === id) || !items.some(i => i.id === target)) return null
+  if (!items.some(i => i.id === id)) return null
+  const parent = orbits.get(id)
+  const target = parent && items.some(i => i.id === parent) ? parent : id
   const { works } = splitWorks(items, orbits)
   const at = rankItems(works, pairs).indexOf(target)
   if (at < 0) return null

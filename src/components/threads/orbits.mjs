@@ -42,15 +42,16 @@ export function findOrbits(items) {
 }
 
 /* The works the graph lays out, and each drawn parent's satellites (by year,
-   then id). A satellite whose parent isn't among `items` appears in neither. */
+   then id). A satellite whose parent isn't among `items` — a topic only the
+   talk carries — stands as a work of its own, so a filter never keeps an
+   item and then draws nothing for it. */
 export function splitWorks(items, orbits) {
   const ids = new Set(items.map(i => i.id))
   const works = []
   const satellites = new Map()
   for (const i of items) {
     const parent = orbits.get(i.id)
-    if (!parent) { works.push(i); continue }
-    if (!ids.has(parent)) continue
+    if (!parent || !ids.has(parent)) { works.push(i); continue }
     if (!satellites.has(parent)) satellites.set(parent, [])
     satellites.get(parent).push(i)
   }

@@ -61,8 +61,9 @@ if (similarity) {
     const extra = [...have.keys()].filter(k => !want.has(k))
     const changed = [...want.keys()].filter(k => have.has(k) && have.get(k) !== want.get(k))
     const touched = [...new Set([...missing, ...extra, ...changed].flatMap(k => k.split('|')))]
-    detail = `${missing.length} pairs missing, ${extra.length} extra, ${changed.length} changed` +
-      (touched.length ? ` (${touched.slice(0, 4).join(', ')}${touched.length > 4 ? ', …' : ''})` : '') +
+    detail = (touched.length
+      ? `${missing.length} pairs missing, ${extra.length} extra, ${changed.length} changed (${touched.slice(0, 4).join(', ')}${touched.length > 4 ? ', …' : ''})`
+      : 'built with other settings than similarity.mjs now has') +
       ' — run npm run build-similarity'
   }
   check('the similarity file is up to date with the items', !stale, detail)
@@ -290,16 +291,26 @@ const pinned = placeOnScreen(
   rank, { x0: -1e6, y0: -1e6, x1: 1e6, y1: 1e6 }, { always: [rank.at(-1)] })
 check('a pinned item is labelled however crowded', pinned.has(rank.at(-1)))
 
-/* Filtering by tag is the other path through the layout. */
-const tags = [...new Set(items.flatMap(i => i.tags || []))]
+/* Filtering by tag is the other path through the layout. The topic line
+   offers every tag in the collection, satellites' included, and the page
+   splits the filtered items into works as it does the whole (ThreadsView). */
+const allOrbits = findOrbits(collection)
+const tags = [...new Set(collection.flatMap(i => i.tags || []))]
 let filterFailures = 0
+const unseen = []
 for (const tag of tags) {
-  const subset = items.filter(i => (i.tags || []).includes(tag))
+  const filtered = collection.filter(i => (i.tags || []).includes(tag))
+  const { works: subset, satellites: subSats } = splitWorks(filtered, allOrbits)
   const sub = layoutGraph(subset, pairs)
   const bad = sub.nodes.some(n => !Number.isFinite(n.x) || n.x < 0 || n.x > sub.width || n.y < 0 || n.y > sub.height)
   if (bad) filterFailures++
+  /* Every item the filter keeps is drawn: as a work, or round a work that is. */
+  const drawn = new Set([...subset.map(i => i.id), ...[...subSats.values()].flat().map(i => i.id)])
+  const lost = filtered.filter(i => !drawn.has(i.id))
+  if (lost.length) unseen.push(`${tag}: ${lost.map(i => i.id).join(', ')}`)
 }
 check(`every one-tag filter lays out cleanly (${tags.length} tags)`, filterFailures === 0, `${filterFailures} broken`)
+check('every one-tag filter draws every item it keeps', unseen.length === 0, unseen.join('; '))
 
 const empty = layoutGraph([])
 check('empty collection does not throw', empty.nodes.length === 0)

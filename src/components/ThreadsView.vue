@@ -189,7 +189,8 @@ const listGroups = computed(() => cvGroups(filtered.value))
 
 /* A talk or poster with its paper's title orbits the paper: the graph lays
    out works, and draws each work's satellites around it (orbits.mjs). Which
-   items orbit is decided on the whole collection, never on a filter. */
+   items orbit is decided on the whole collection, never on a filter; under a
+   topic only the talk carries, it stands on its own. */
 const orbits = computed(() => findOrbits(items.value))
 const split = computed(() => splitWorks(filtered.value, orbits.value))
 const works = computed(() => split.value.works)
@@ -236,16 +237,15 @@ const linkReason = computed(() => {
 
 const inGraph = computed(() => view.value === 'graph' && !isNarrow.value)
 
-/* Make an item visible, then pin it: clear a topic that hides it (or, in
-   the graph, hides the paper it orbits), then pin. The graph keeps a pin on
-   show at every zoom and frames it itself. Search uses this too. */
+/* Make an item visible, then pin it: clear a topic or realm that hides it,
+   then pin. (A talk whose paper a topic hides is drawn on its own, so only
+   the item itself matters.) The graph keeps a pin on show at every zoom and
+   frames it itself. Search uses this too. */
 function revealAndPin(id) {
   const item = byId.value.get(id)
   if (!item) return false
-  const parent = orbits.value.get(id)
-  const needs = inGraph.value && parent ? [item, byId.value.get(parent)] : [item]
-  if (needs.some(i => !inRealm(i))) researchOnly.value = false
-  if (activeTag.value && needs.some(i => !(i.tags || []).includes(activeTag.value))) activeTag.value = null
+  if (!inRealm(item)) researchOnly.value = false
+  if (activeTag.value && !(item.tags || []).includes(activeTag.value)) activeTag.value = null
   selectedId.value = id
   if (!inGraph.value) {
     nextTick(() => document.querySelector(`.listing [data-id="${CSS.escape(id)}"]`)?.scrollIntoView({ block: 'center' }))
