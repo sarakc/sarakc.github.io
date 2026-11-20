@@ -6,33 +6,10 @@ decision in `DESIGN.md`.
 
 ## Hosting
 
-### Warm kitchen in its own repository (noted 2026-11-16)
+### Link Tempo from the home page (noted 2026-11-16)
 
-One public repository per project, served by GitHub Pages from its `main` branch root at
-`https://sarakc.github.io/<repo>/`, as `sarakc/tempo` already is and the music viewer will
-be. This repository then holds only the Vue site, and no project commits to its `main` on a
-schedule.
-
-- **New repo `sarakc/warm-kitchen` (public):** today's `public/warm-kitchen/` at its root
-  (`warm_kitchen_finder.html`, `cookbook/index.html`), `.nojekyll`,
-  `scripts/update-warm-kitchen-cookbook.mjs` with its output path changed to
-  `cookbook/index.html`, and `sync-cookbook.yml` (weekly, Mondays, plus the manual run).
-  It needs no build or deploy step: committing the refreshed cookbook is the deploy.
-- **Same URLs:** `/warm-kitchen/warm_kitchen_finder.html` and `/warm-kitchen/cookbook/` stay
-  where they are, and the cookbook's `../warm_kitchen_finder.html` link still works.
-- **Cutover:** turn on Pages in the new repo, check both URLs, then delete
-  `public/warm-kitchen/`, `scripts/update-warm-kitchen-cookbook.mjs` and
-  `.github/workflows/sync-cookbook.yml` here, and check both URLs again after the site
-  deploys.
-- **Before moving:** the local `warm-kitchen` project folder (beside this checkout) is not a git repo, and its
-  `warm_kitchen_finder.html` differs from the one here (this one has the later commits,
-  `ad5942b1`). Confirm which is current, move the `.docx` aside, then clone the new repo
-  there.
-- Tempo is already hosted this way but is not linked from the home page; add a link if
-  wanted.
-- This repository's working tree had uncommitted changes on 2026-11-16 (deleted `dist/`
-  files, `package.json`, `package-lock.json`, `.gitignore`, `public/index.html`); settle
-  them before the cutover commit.
+Tempo is hosted as its own repository (`sarakc/tempo`, at `/tempo/`) but is not linked from
+the home page; add a link if wanted.
 
 ## /threads
 

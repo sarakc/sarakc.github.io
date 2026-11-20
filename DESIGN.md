@@ -451,3 +451,15 @@ constraint on the page, and it's a content problem, not a design one.
 
 Add items with `npm run add-item` (opens [`tools/add-item.html`](tools/add-item.html)),
 then `npm run check-items` and `npm run check-graph`.
+
+## Hosting — one repository per project (2026-11-19)
+
+This repository holds only the Vue site. Each project is its own public repository, served
+by GitHub Pages from its `main` root at `https://sarakc.github.io/<repo>/`: `sarakc/tempo`,
+`sarakc/warm-kitchen` (the finder and the cookbook, with its weekly Google Docs sync) and the
+music viewer `sarakc/music-explorer`. No project commits to this repository's `main` on a
+schedule.
+
+Warm kitchen moved out on 2026-11-19 (`public/warm-kitchen/`,
+`scripts/update-warm-kitchen-cookbook.mjs` and `.github/workflows/sync-cookbook.yml`
+removed here); its URLs are unchanged.
