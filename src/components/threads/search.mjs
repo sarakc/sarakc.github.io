@@ -1,12 +1,13 @@
 /* Search for `/`: every word typed must start some word of an item's
    title, creator, venue, tags, people or year. Case and accents are
    ignored; nothing else is dropped — no stop words, no short words, no
-   plurals — so "AI" finds AI. No regex is built from what's typed.
-   Spec §7. */
+   plurals — so "AI" finds AI. A word keeps the + and # straight after it,
+   so "c++" finds C++ and not C, and "C#" finds C#; "c" finds all three.
+   No regex is built from what's typed. Spec §7. */
 import { fold } from './orbits.mjs'
 import { typeInfo } from './types.mjs'
 
-const words = text => fold(text).split(/[^\p{L}\p{N}]+/u).filter(Boolean)
+const words = text => fold(text).match(/[\p{L}\p{N}]+[+#]*/gu) || []
 
 const matchesAll = (query, pool) => query.every(q => pool.some(w => w.startsWith(q)))
 

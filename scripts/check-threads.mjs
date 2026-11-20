@@ -236,6 +236,15 @@ await section('search', async () => {
   check('"AI" matches titles with AI in them', ids(searchItems(research, 'AI', 100)).includes('talk-2025-cosi-ai-basics'))
   check('punctuation and regex characters never throw',
     ['c++', '(', 'ai?', '"', '[', '\\', '.*'].every(q => Array.isArray(searchItems(research, q))))
+  const langs = [
+    { id: 'cpp', type: 'book', title: 'The C++ Programming Language' },
+    { id: 'c', type: 'book', title: 'The C Programming Language' },
+    { id: 'cs', type: 'book', title: 'C# in Depth' },
+  ]
+  check('"c++" finds C++ and not C', ids(searchItems(langs, 'c++')).join() === 'cpp', ids(searchItems(langs, 'c++')).join())
+  check('"c#" finds C# alone', ids(searchItems(langs, 'C#')).join() === 'cs', ids(searchItems(langs, 'C#')).join())
+  check('"c" still finds all three', searchItems(langs, 'c').length === 3)
+  check('a lone "+" matches nothing rather than everything', searchItems(langs, '+').length === 0)
   check('nothing matches "zzzz"', searchItems(research, 'zzzz').length === 0)
   check('an empty query gives nothing', searchItems(research, '').length === 0 && searchItems(research, '   ').length === 0)
   check('accents are ignored', ids(searchItems(loved, 'episode')).includes('fixture-podcast'))

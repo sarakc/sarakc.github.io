@@ -70,7 +70,7 @@ onMounted(() => input.value?.focus())
       role="combobox"
       aria-autocomplete="list"
       :aria-expanded="results.length > 0"
-      aria-controls="search-results"
+      :aria-controls="results.length ? 'search-results' : undefined"
       :aria-activedescendant="active >= 0 ? `search-result-${active}` : undefined"
       @keydown="onKey"
       @blur="emit('close')"

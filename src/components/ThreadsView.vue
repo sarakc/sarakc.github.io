@@ -288,9 +288,14 @@ function pinFromUrl() {
     router.replace({ query })
   }
 }
-/* A link pasted into an already open page. Our own replace never loops:
-   it only runs when the URL and the pin disagree. */
-watch(() => route.query.item, () => { if (!loading.value) pinFromUrl() })
+/* A link pasted into an already open page, or `item=` deleted from the
+   address bar, which unpins. Our own replace never loops: it only runs when
+   the URL and the pin disagree. */
+watch(() => route.query.item, id => {
+  if (loading.value) return
+  if (id) pinFromUrl()
+  else selectedId.value = null
+})
 
 watch(selectedId, id => {
   if (loading.value) return
