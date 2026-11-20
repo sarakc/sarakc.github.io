@@ -234,16 +234,26 @@ const isPreviewing = computed(() =>
   Boolean(lookId.value && selectedId.value && lookId.value !== selectedId.value)
 )
 
-/* Why the hovered item is linked to the pinned one, if it is. */
-const pairIndex = computed(() => {
+/* Why the hovered item is linked to the pinned one: only when the graph
+   draws a line between them (GraphView's `links`), and for a talk, the line
+   is its paper's. The similarity file holds up to eight candidates per item,
+   but each item draws only its best few. */
+const drawnLinks = ref([])
+const linkIndex = computed(() => {
   const m = new Map()
-  for (const p of pairs.value || []) m.set(`${p.source}|${p.target}`, p).set(`${p.target}|${p.source}`, p)
+  for (const l of drawnLinks.value) m.set(`${l.source}|${l.target}`, l).set(`${l.target}|${l.source}`, l)
+  return m
+})
+const familyOf = computed(() => {
+  const m = new Map()
+  for (const [parent, list] of split.value.satellites) for (const i of list) m.set(i.id, parent)
   return m
 })
 const linkReason = computed(() => {
   if (!isPreviewing.value) return ''
-  const p = pairIndex.value.get(`${selectedId.value}|${lookId.value}`)
-  return p ? describeReasons(p.reasons).join(' · ') : ''
+  const fam = id => familyOf.value.get(id) || id
+  const l = linkIndex.value.get(`${fam(selectedId.value)}|${fam(lookId.value)}`)
+  return l ? describeReasons(l.reasons).join(' · ') : ''
 })
 
 /* ── one item, by link ─────────────────────────────────────────────────
@@ -345,6 +355,7 @@ function toggleRow(id) {
         :peek-id="peekId"
         @select="id => selectedId = id"
         @hover="id => hoveredId = id"
+        @links="list => drawnLinks = list"
       >
         <template #controls>
           <button

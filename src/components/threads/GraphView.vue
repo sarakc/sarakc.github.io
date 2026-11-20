@@ -31,7 +31,7 @@ const props = defineProps({
   peekId: { type: String, default: null },
 })
 
-const emit = defineEmits(['select', 'hover'])
+const emit = defineEmits(['select', 'hover', 'links'])
 
 const stage = ref(null)
 const size = reactive({ w: 0, h: 0 })
@@ -157,6 +157,11 @@ const visibleIds = computed(previous => {
 const layout = computed(() =>
   subLayout(full.value, props.items.filter(i => visibleIds.value.has(i.id)), props.pairs))
 const rank = computed(() => fullRank.value.filter(id => visibleIds.value.has(id)))
+/* The lines actually drawn, and why: the page says "linked by …" only for
+   these, not for every candidate pair in the similarity file. */
+watch(() => layout.value.edges, edges => {
+  emit('links', edges.map(e => ({ source: e.source.id, target: e.target.id, reasons: e.reasons || [] })))
+}, { immediate: true })
 
 /* The step dots between − and +: each zooms to the view that shows it. */
 function showLevel(lv) {
