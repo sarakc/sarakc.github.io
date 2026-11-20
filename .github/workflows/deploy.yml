@@ -14,18 +14,28 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Setup Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
-          node-version: '18'
+          node-version: '20'
           cache: 'npm'
 
-      - name: Install and build
+      # npm ci installs exactly what package-lock.json records.
+      - name: Install
+        run: npm ci
+
+      # check-graph also fails when items.similarity.json is out of date with
+      # items.json, so a forgotten `npm run build-similarity` never deploys.
+      # (check-threads reads drafts/, which isn't in the repository.)
+      - name: Check the /threads data
         run: |
-          npm install
-          npm run build
+          npm run check-items
+          npm run check-graph
+
+      - name: Build
+        run: npm run build
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
