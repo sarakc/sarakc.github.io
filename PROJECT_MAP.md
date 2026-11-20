@@ -54,7 +54,8 @@ development server; production builds always use `public/threads/items.json`.
 | `scripts/check-items.mjs` | schema validator. `npm run check-items` |
 | `scripts/check-graph.mjs` | layout checks against the real data, and that the similarity file matches the items. `npm run check-graph` |
 | `scripts/check-threads.mjs` | unit checks for the pure modules (types, orbits, time ranks, camera, level reveal, search). `npm run check-threads` |
-| `tools/add-item.html` | the item editor. `npm run add-item` |
+| `tools/add-item.html` | the item editor. `npm run add-item` serves it on 127.0.0.1 (`tools/serve-add-item.mjs`; it imports `types.mjs`, which a page opened as a file can't) and opens it |
+| `tools/items-editor.mjs` | the editor's data logic: merging the form into an item without losing fields it doesn't show, keeping the file's top-level blocks. Tested by `check-threads` |
 | `inspiration/` | reference images and sketches behind the `/threads` design |
 
 ## Build & deploy
@@ -68,7 +69,7 @@ development server; production builds always use `public/threads/items.json`.
 
 ## Adding a recommendation
 
-1. `npm run add-item` — opens the editor, saves back to `public/threads/items.json`.
+1. `npm run add-item` — serves and opens the editor, which saves back to `public/threads/items.json`.
    (Or edit the JSON by hand; schema is in `public/threads/README.md`.)
 2. `npm run build-similarity` — rebuilds `public/threads/items.similarity.json`.
    Needed after any add or edit: the page draws its lines from that file.

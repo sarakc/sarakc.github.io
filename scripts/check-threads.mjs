@@ -256,6 +256,49 @@ await section('check-items', async () => {
   check('a numeric title fails', bad.status === 1 && /\[fixture-numeric-title\]: title must be a string/.test(bad.stdout), bad.stdout.trim())
 })
 
+await section('item editor', async () => {
+  const { toForm, mergeItem, saveItem, deleteItem, serialise, parseCollection, validate } = await import('../tools/items-editor.mjs')
+  const { KNOWN_TYPES } = await import('../src/components/threads/types.mjs')
+  const { existsSync } = await import('node:fs')
+  /* What "edit, then save changes" does to an item when nothing was touched. */
+  const roundTrip = (items, item) => saveItem(items, item.id, mergeItem(item, toForm(item)))
+  for (const file of ['public/threads/items.json', 'drafts/threads-research.json', 'drafts/threads-paper-candidates.json']) {
+    if (!existsSync(resolve(root, file))) continue
+    const text = await readFile(resolve(root, file), 'utf8')
+    const { data } = parseCollection(text)
+    let items = data.items
+    for (const item of data.items) items = roundTrip(items, item)
+    check(`${file}: saving every item untouched gives the same file`, serialise(data, items) === text)
+  }
+  const text = await readFile(resolve(root, 'public/threads/items.json'), 'utf8')
+  const { data } = parseCollection(text)
+  const talk = data.items.find(i => i.type === 'talk' && i.venue && i.project && i.community)
+  const edited = mergeItem(talk, { ...toForm(talk), note: 'A new note.' })
+  check('editing a note changes only the note',
+    JSON.stringify({ ...edited, note: undefined }) === JSON.stringify({ ...talk, note: undefined }) && edited.note === 'A new note.')
+  const keep = ['venue', 'project', 'community', 'place', 'people', 'methods', 'languages', 'mine', 'venueShort']
+  const rich = data.items.find(i => keep.filter(f => f in i).length >= 6)
+  const retitled = mergeItem(rich, { ...toForm(rich), title: rich.title + ' (revised)' })
+  check('fields the form does not show survive an edit', keep.every(f => JSON.stringify(retitled[f]) === JSON.stringify(rich[f])))
+  const saved = parseCollection(serialise(data, saveItem(data.items, rich.id, retitled))).data
+  check('the top-level about and tags blocks survive a save',
+    saved.about === data.about && JSON.stringify(saved.tags) === JSON.stringify(data.tags) &&
+    JSON.stringify(Object.keys(saved)) === JSON.stringify(Object.keys(data)))
+  const withUrl = data.items.find(i => i.url)
+  const cleared = mergeItem(withUrl, { ...toForm(withUrl), url: '  ' })
+  check('clearing a field removes it', !('url' in cleared) && cleared.venue === withUrl.venue)
+  const fresh = mergeItem(null, { ...toForm(null), id: 'new-talk', type: 'talk', title: ' New Talk ', added: '2026-11-20', tags: 'Morphology, analogy', year: '2026' })
+  check('a new item is written in form order, trimmed',
+    JSON.stringify(fresh) === '{"id":"new-talk","type":"talk","title":"New Talk","added":"2026-11-20","tags":["morphology","analogy"],"year":2026}', JSON.stringify(fresh))
+  check('every type in types.mjs can be created', KNOWN_TYPES.every(type =>
+    validate({ ...fresh, id: `new-${type}`, type }, data.items, null).errors.length === 0))
+  const renamed = saveItem([{ id: 'a', connects: ['b'] }, { id: 'b' }], 'b', { id: 'c' })
+  check('a renamed id is chased through connects', JSON.stringify(renamed) === '[{"id":"a","connects":["c"]},{"id":"c"}]', JSON.stringify(renamed))
+  const removed = deleteItem([{ id: 'a', connects: ['b'] }, { id: 'b' }], 'b')
+  check('deleting an item drops links to it', JSON.stringify(removed) === '[{"id":"a"}]', JSON.stringify(removed))
+  check('a file without items is refused', Boolean(parseCollection('{"about":"x"}').error) && Boolean(parseCollection('nope').error))
+})
+
 section('tags.mjs — labels and order', () => {
   check('kebab-case reads as words', tagLabel('language-contact') === 'language contact')
   check('acronyms keep their capitals', tagLabel('responsible-ai') === 'responsible AI' && tagLabel('llms') === 'LLMs')

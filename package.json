@@ -7,7 +7,7 @@
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
     "check-items": "node scripts/check-items.mjs",
-    "add-item": "open tools/add-item.html || xdg-open tools/add-item.html",
+    "add-item": "node tools/serve-add-item.mjs",
     "check-graph": "node scripts/check-graph.mjs",
     "check-threads": "node scripts/check-threads.mjs",
     "build-similarity": "node scripts/build-threads-similarity.mjs"

@@ -110,10 +110,13 @@ only when the type needs a color distinct from its form's base hue.
 
 ## Adding items the easy way
 
-`npm run add-item` opens [`tools/add-item.html`](../../tools/add-item.html): a
-form with type swatches, tag autocomplete from tags already in use, a picker
-for `connects`, live validation matching `check-items.mjs`, and a preview of
-how the entry will look. In Chrome or Edge it saves straight back to this
+`npm run add-item` serves [`tools/add-item.html`](../../tools/add-item.html) on
+this machine and opens it: a form with a swatch for every type in `types.mjs`,
+tag autocomplete from tags already in use, a picker for `connects`, live
+validation matching `check-items.mjs`, and a preview of how the entry will
+look. Editing an item changes only the fields you change; everything the form
+doesn't show (venue, project, people and the rest) and the file's top-level
+`about` and `tags` are kept. In Chrome or Edge it saves straight back to this
 file; elsewhere it hands you a download.
 
 Then:

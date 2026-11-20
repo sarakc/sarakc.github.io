@@ -12,6 +12,7 @@
     --bg: #ffffff;
     --stage: #fcfdfe;
     --ink: #2c3e50;
+    --page-ink: var(--ink);   /* own work is drawn in ink (types.mjs markFor) */
     --dim: #7a8896;
     --hair: rgba(44, 62, 80, 0.13);
     --hair-soft: rgba(44, 62, 80, 0.07);
@@ -199,6 +200,12 @@
     <button id="btnCopy" disabled>copy json</button>
   </div>
 
+  <!-- Opened as a file, the browser refuses the module imports below. -->
+  <div class="start hidden" id="needsServer">
+    <h2>Run <span>npm run add-item</span></h2>
+    <p>The editor reads its type list from <code>src/components/threads/types.mjs</code>, and browsers only load modules from a server. <code>npm run add-item</code> starts a small one on this machine and opens the editor there.</p>
+  </div>
+
   <!-- start -->
   <div class="start" id="start">
     <h2>Open <span>items.json</span></h2>
@@ -284,18 +291,27 @@
 
       <p class="foot">
         Saved file goes to <code>public/threads/items.json</code>.<br>
-        Then: <code>npm run check-items</code> → <code>npm run check-graph</code> → commit.
+        Then: <code>npm run build-similarity</code> → <code>npm run check-items</code> → <code>npm run check-graph</code> → commit.
       </p>
     </div>
   </div>
 </div>
 
 <script>
-const TYPES = ['book', 'paper', 'podcast', 'music', 'video', 'film', 'art', 'post'];
-const SLUG_RE = /^[a-z0-9][a-z0-9-]*$/;
-const DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
+  if (location.protocol === 'file:') {
+    document.getElementById('needsServer').classList.remove('hidden');
+    document.getElementById('start').classList.add('hidden');
+  }
+</script>
+<script type="module">
+/* The type table is the one in types.mjs, so every type the site knows can
+   be created here. The data logic (merging the form into an item, keeping
+   every field and top-level block it doesn't show) is items-editor.mjs. */
+import { KNOWN_TYPES as TYPES, markFor } from '../src/components/threads/types.mjs';
+import { toForm, mergeItem, saveItem, deleteItem, parseCollection, serialise as writeCollection, validate as check, splitTags } from './items-editor.mjs';
 
 const state = {
+  data: null,        // the whole file as opened: about, tags, … and items
   items: [],
   handle: null,      // FileSystemFileHandle, when the browser gave us one
   fileName: 'items.json',
@@ -322,22 +338,17 @@ const chip = (cls, text, pressed, onClick) => {
   b.addEventListener('click', onClick);
   return b;
 };
-const splitTags = s => s.split(',').map(t => t.trim().toLowerCase()).filter(Boolean);
+const colourOf = item => markFor(item).colour;
 
 /* ---------- opening the file ---------- */
 
 function loadText(text, name) {
-  let data;
-  try {
-    data = JSON.parse(text);
-  } catch (e) {
-    alert('That file is not valid JSON:\n\n' + e.message);
+  const { data, error } = parseCollection(text);
+  if (error) {
+    alert(error);
     return false;
   }
-  if (!data || !Array.isArray(data.items)) {
-    alert('Expected an object with an "items" array at the top level.');
-    return false;
-  }
+  state.data = data;
   state.items = data.items;
   state.fileName = name || 'items.json';
   state.loaded = true;
@@ -392,7 +403,7 @@ document.addEventListener('drop', async e => {
 
 /* ---------- saving ---------- */
 
-const serialise = () => JSON.stringify({ items: state.items }, null, 2) + '\n';
+const serialise = () => writeCollection(state.data, state.items);
 
 async function save() {
   state.error = '';
@@ -469,79 +480,54 @@ function suggestId() {
   return [creator, title].filter(Boolean).join('-');
 }
 
+/* The form as typed: one raw string per field (items-editor.mjs toForm). */
 function readForm() {
-  const item = {
-    id: $('f-id').value.trim(),
+  return {
+    id: $('f-id').value,
     type: state.type,
-    title: $('f-title').value.trim(),
+    title: $('f-title').value,
     added: $('f-added').value,
-    tags: splitTags($('f-tags').value),
+    tags: $('f-tags').value,
+    url: $('f-url').value,
+    creator: $('f-creator').value,
+    year: $('f-year').value,
+    connects: [...state.connects],
+    note: $('f-note').value,
   };
-  const url = $('f-url').value.trim();
-  const creator = $('f-creator').value.trim();
-  const note = $('f-note').value.trim();
-  const year = $('f-year').value.trim();
-  // Only carry the optional keys that actually have something in them.
-  if (url) item.url = url;
-  if (creator) item.creator = creator;
-  if (year) item.year = Number(year);
-  if (state.connects.size) item.connects = [...state.connects];
-  if (note) item.note = note;
-  return item;
 }
 
-/* Mirrors scripts/check-items.mjs, so nothing gets past here that fails there. */
-function validate(item) {
-  const errors = [];
-  const warnings = [];
-  for (const f of ['id', 'type', 'title', 'added']) if (!item[f]) errors.push('missing ' + f);
-  if (!item.tags.length) errors.push('missing tags');
-  if (item.id && !SLUG_RE.test(item.id)) errors.push('id "' + item.id + '" must be kebab-case');
-  if (state.items.some(i => i.id === item.id && i.id !== state.editingId)) {
-    errors.push('id "' + item.id + '" is already used');
-  }
-  if (item.added && !DATE_RE.test(item.added)) errors.push('added must be YYYY-MM-DD');
-  if (item.year !== undefined && (!Number.isInteger(item.year) || item.year < 1000 || item.year > 9999)) {
-    errors.push('year must be a four-digit number');
-  }
-  if (item.url && !/^https?:\/\//.test(item.url)) warnings.push('url does not start with http(s)://');
-  for (const t of item.tags) if (!SLUG_RE.test(t)) warnings.push('tag "' + t + '" should be lowercase kebab-case');
-  if (!item.note) warnings.push('no note — the note is the part that does the work');
-  return { errors, warnings };
-}
+const editingItem = () => (state.editingId ? state.items.find(x => x.id === state.editingId) || null : null);
+
+/* What saving would write: the item being edited with the form's changes,
+   every field the form doesn't show kept as it was. */
+const draft = () => mergeItem(editingItem(), readForm());
+
+const validate = item => check(item, state.items, state.editingId);
 
 function fillForm(item) {
-  state.type = item ? item.type : 'book';
-  state.connects = new Set(item ? item.connects || [] : []);
+  const form = toForm(item);
+  state.type = form.type || 'book';
+  state.connects = new Set(form.connects);
   state.editingId = item ? item.id : null;
   // An existing id is deliberate; typing a title must never rewrite it.
   state.idTouched = Boolean(item);
-  $('f-title').value = item?.title || '';
-  $('f-creator').value = item?.creator || '';
-  $('f-url').value = item?.url || '';
-  $('f-added').value = item?.added || today();
-  $('f-year').value = item?.year || '';
-  $('f-id').value = item?.id || '';
-  $('f-tags').value = (item?.tags || []).join(', ');
-  $('f-note').value = item?.note || '';
+  $('f-title').value = form.title;
+  $('f-creator').value = form.creator;
+  $('f-url').value = form.url;
+  $('f-added').value = form.added || today();
+  $('f-year').value = form.year;
+  $('f-id').value = form.id;
+  $('f-tags').value = form.tags;
+  $('f-note').value = form.note;
   renderAll();
 }
 
 $('form').addEventListener('submit', e => {
   e.preventDefault();
-  const item = readForm();
+  const item = draft();
   if (validate(item).errors.length) { renderAll(); return; }
-  if (state.editingId) {
-    // A renamed id has to be chased through everything pointing at the old one.
-    if (item.id !== state.editingId) {
-      for (const other of state.items) {
-        if (other.connects) other.connects = other.connects.map(c => (c === state.editingId ? item.id : c));
-      }
-    }
-    state.items[state.items.findIndex(x => x.id === state.editingId)] = item;
-  } else {
-    state.items.unshift(item);
-  }
+  // A renamed id is chased through everything pointing at the old one.
+  state.items = saveItem(state.items, state.editingId, item);
   state.dirty = true;
   fillForm(null);
 });
@@ -564,7 +550,7 @@ function renderTypes() {
   $('types').replaceChildren(...TYPES.map(t => {
     const b = chip(null, null, state.type === t, () => { state.type = t; renderAll(); });
     const dot = el('i');
-    dot.style.background = 'var(--t-' + t + ')';
+    dot.style.background = colourOf({ type: t });
     b.append(dot, document.createTextNode(t));
     return b;
   }));
@@ -625,7 +611,7 @@ function renderItems() {
   $('items').replaceChildren(...sorted.map(item => {
     const row = el('div', 'row' + (item.id === state.editingId ? ' editing' : ''));
     const dot = el('i');
-    dot.style.background = 'var(--t-' + item.type + ', #fff)';
+    dot.style.background = colourOf(item);
     const t = el('div', 't');
     t.append(el('b', null, item.title), document.createTextNode(' '));
     if (item.creator) t.append(el('span', null, item.creator));
@@ -637,12 +623,7 @@ function renderItems() {
     del.type = 'button';
     del.addEventListener('click', () => {
       if (!confirm('Delete "' + item.title + '"?')) return;
-      state.items = state.items.filter(i => i.id !== item.id);
-      for (const other of state.items) {
-        if (!other.connects) continue;
-        other.connects = other.connects.filter(c => c !== item.id);
-        if (!other.connects.length) delete other.connects;
-      }
+      state.items = deleteItem(state.items, item.id);
       state.dirty = true;
       if (state.editingId === item.id) fillForm(null);
       else renderAll();
@@ -663,14 +644,14 @@ function renderPreview(item) {
   const meta = el('div', 'pv-meta');
   const left = el('span', 'l');
   const dot = el('i');
-  dot.style.background = 'var(--t-' + item.type + ')';
+  dot.style.background = colourOf(item);
   left.append(dot, document.createTextNode(item.type));
   meta.append(left, el('span', null, item.year ? String(item.year) : (item.added || '').replace(/-/g, ' · ')));
 
   const parts = [meta, el('h3', null, item.title)];
   if (item.creator) parts.push(el('div', 'by', item.creator));
   if (item.note) parts.push(el('p', 'note', item.note));
-  if (item.tags.length) parts.push(el('div', 'tags', item.tags.map(t => '#' + t).join(' · ')));
+  if (item.tags && item.tags.length) parts.push(el('div', 'tags', item.tags.map(t => '#' + t).join(' · ')));
   if (item.url) parts.push(el('div', 'link', '↗ ' + item.url.replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, '')));
   pv.replaceChildren(...parts);
 }
@@ -705,7 +686,7 @@ function render() {
   $('idHint').textContent = state.idTouched ? 'yours' : 'auto';
 
   syncTagPicks();
-  const item = readForm();
+  const item = draft();
   if (!item.id) item.id = suggestId();
   const result = validate(item);
   renderPreview(item);
