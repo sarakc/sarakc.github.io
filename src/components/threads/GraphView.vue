@@ -1,5 +1,5 @@
 <script setup>
-import { ref, reactive, computed, watch, nextTick, onMounted, onBeforeUnmount } from 'vue'
+import { ref, reactive, computed, watch, nextTick, onMounted, onUpdated, onBeforeUnmount } from 'vue'
 import {
   layoutGraph, subLayout, levelCounts, levelAtZoom, zoomForLevel, rankItems, placeOnScreen, slots, labelSize, boxAt,
   edgePath, ghostPath, kicker, labelVenue, TITLE_LINE, YEAR_LINE,
@@ -36,6 +36,8 @@ const emit = defineEmits(['select', 'hover'])
 const stage = ref(null)
 const size = reactive({ w: 0, h: 0 })
 const hoveredId = ref(null)
+/* The node that has keyboard focus, if any: kept on show like a hover. */
+const focusedId = ref(null)
 const generation = ref(0)
 /* The whole collection, laid out once; `layout` is the part on show. */
 const full = ref({ nodes: [], edges: [], adjacency: new Map(), width: 1200, height: 700, centre: { x: 600, y: 350 } })
@@ -133,18 +135,23 @@ const zoomBy = factor => zoomAt(size.w / 2, (size.h - CONTROLS) / 2, factor, tru
 /* ── what is on show ──────────────────────────────────────────────────── */
 
 const level = computed(() => levelAtZoom(cam.k / fitScale.value, counts.value.length))
-/* The top of the ranking for this zoom, plus whatever is pinned or being
-   previewed and everything the pin links to: those stay on show however far
-   you zoom out. */
-const visibleIds = computed(() => {
+/* The top of the ranking for this zoom, plus whatever is pinned, previewed,
+   hovered or focused, and everything the pin links to: those stay on show
+   however far you zoom out. Zooming out from under the pointer or the
+   keyboard focus would otherwise remove the node with no mouseleave or
+   blur, leaving the graph dimmed round nothing and focus on <body>. */
+const visibleIds = computed(previous => {
   const ids = new Set(fullRank.value.slice(0, counts.value[level.value]))
-  for (const id of [props.selectedId, props.peekId]) {
+  for (const id of [props.selectedId, props.peekId, hoveredId.value, focusedId.value]) {
     if (!id) continue
     const f = parentOfAll.value.get(id) || id
     if (!full.value.adjacency.has(f)) continue
     ids.add(f)
     if (id === props.selectedId) for (const n of full.value.adjacency.get(f)) ids.add(n)
   }
+  /* Hovering what is already on show changes nothing: hand back the same
+     set, so the layout isn't rebuilt on every mouseenter. */
+  if (previous && previous.size === ids.size && [...ids].every(id => previous.has(id))) return previous
   return ids
 })
 const layout = computed(() =>
@@ -494,6 +501,7 @@ function clearPick() {
 
 /* Tabbing to an item off screen brings it into view. */
 function onNodeFocus(id) {
+  focusedId.value = id
   setHover(id)
   const p = points.value.get(famId(id))
   if (!p) return
@@ -501,6 +509,49 @@ function onNodeFocus(id) {
     moveTo(clampPan({ k: cam.k, x: cam.x + size.w / 2 - p.x, y: cam.y + (size.h - CONTROLS) / 2 - p.y }))
   }
 }
+
+function onNodeBlur() {
+  focusedId.value = null
+  setHover(null)
+}
+
+/* Whatever still removes a node from under the pointer or the focus (a new
+   layout, a satellite folding away) must not leave things stuck: a hover on
+   something no longer drawn is dropped, and focus lost with its node goes to
+   the graph itself, where + − 0 and the arrows still work. */
+const drawnIds = computed(() => {
+  const ids = new Set(layout.value.nodes.map(n => n.id))
+  for (const list of satPoints.value.values()) for (const x of list) ids.add(x.id)
+  return ids
+})
+watch(drawnIds, ids => {
+  if (hoveredId.value && !ids.has(hoveredId.value)) setHover(null)
+  if (focusedId.value && !ids.has(focusedId.value)) focusedId.value = null
+})
+/* The element inside the graph that last took focus. A node removed while
+   focused (a new layout re-renders them all) takes focus with it to
+   <body>: Chrome fires a blur as it goes, other browsers may not. Either
+   way, once any focus move in progress has landed (Tab can remove the node
+   it leaves), look: if that element is gone and nothing else has focus,
+   focus the graph. A node that is still there lost focus on purpose. */
+let focusedEl = null
+let rescueTimer = 0
+function checkFocus() {
+  clearTimeout(rescueTimer)
+  rescueTimer = setTimeout(() => {
+    if (!focusedEl) return
+    const el = document.activeElement
+    if (focusedEl.isConnected) {
+      if (el !== focusedEl) focusedEl = null
+      return
+    }
+    focusedEl = null
+    if (stage.value && (!el || el === document.body)) stage.value.focus({ preventScroll: true })
+  }, 0)
+}
+function onFocusIn(e) { focusedEl = e.target === stage.value ? null : e.target }
+function onFocusOut(e) { if (!stage.value?.contains(e.relatedTarget)) checkFocus() }
+onUpdated(() => { if (focusedEl) checkFocus() })
 
 /* The first title line drops below the kicker when there is one. */
 function lineDy(node, i) {
@@ -553,6 +604,7 @@ onBeforeUnmount(() => {
   stage.value?.removeEventListener('wheel', onWheel)
   cancelAnimationFrame(tween)
   clearTimeout(foldTimer)
+  clearTimeout(rescueTimer)
 })
 
 defineExpose({ fitView })
@@ -571,6 +623,8 @@ defineExpose({ fitView })
     @pointercancel="onPointerUp"
     @dblclick="onDblClick"
     @keydown="onKey"
+    @focusin="onFocusIn"
+    @focusout="onFocusOut"
   >
     <svg v-if="size.w" :width="size.w" :height="size.h" :viewBox="`0 0 ${size.w} ${size.h}`" role="group"
          aria-label="Each point is one item; lines join the most similar.">
@@ -618,7 +672,7 @@ defineExpose({ fitView })
           @mouseenter="setHover(node.id)"
           @mouseleave="setHover(null)"
           @focus="onNodeFocus(node.id)"
-          @blur="setHover(null)"
+          @blur="onNodeBlur"
         >
           <circle class="hit" :cx="points.get(node.id).x" :cy="points.get(node.id).y" :r="node.r + 12" />
           <rect
@@ -671,7 +725,7 @@ defineExpose({ fitView })
           @mouseenter="setHover(sat.id)"
           @mouseleave="setHover(null)"
           @focus="onNodeFocus(sat.id)"
-          @blur="setHover(null)"
+          @blur="onNodeBlur"
         >
           <!-- The copy itself is drawn behind the paper; this is its target. -->
           <circle class="hit" :cx="sat.x" :cy="sat.y" :r="sat.r + 1.5" />
