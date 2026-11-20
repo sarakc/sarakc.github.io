@@ -52,7 +52,7 @@ development server; production builds always use `public/threads/items.json`.
 | `public/threads/items.json` | **the content.** One object per recommendation |
 | `public/threads/README.md` | the `items.json` schema — required/optional fields (`mine`, `year`), worked example; the type list lives in `types.mjs` |
 | `scripts/check-items.mjs` | schema validator. `npm run check-items` |
-| `scripts/check-graph.mjs` | layout checks against the real data. `npm run check-graph` |
+| `scripts/check-graph.mjs` | layout checks against the real data, and that the similarity file matches the items. `npm run check-graph` |
 | `scripts/check-threads.mjs` | unit checks for the pure modules (types, orbits, time ranks, camera, level reveal, search). `npm run check-threads` |
 | `tools/add-item.html` | the item editor. `npm run add-item` |
 | `inspiration/` | reference images and sketches behind the `/threads` design |
@@ -70,8 +70,11 @@ development server; production builds always use `public/threads/items.json`.
 
 1. `npm run add-item` — opens the editor, saves back to `public/threads/items.json`.
    (Or edit the JSON by hand; schema is in `public/threads/README.md`.)
-2. `npm run check-items` and `npm run check-graph`.
-3. Commit and push — Pages rebuilds in a minute or two.
+2. `npm run build-similarity` — rebuilds `public/threads/items.similarity.json`.
+   Needed after any add or edit: the page draws its lines from that file.
+3. `npm run check-items` and `npm run check-graph`. `check-graph` fails while
+   the similarity file is out of date with the items, and the deploy runs both.
+4. Commit and push — Pages rebuilds in a minute or two.
 
 ## Design
 

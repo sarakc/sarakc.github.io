@@ -10,6 +10,7 @@ import {
   shortTitle, shortVenue, rankItems, levelCounts, placeOnScreen, similarityEdges,
 } from '../src/components/threads/graph.mjs'
 import { findOrbits, splitWorks, fanPoints, restPoints } from '../src/components/threads/orbits.mjs'
+import { buildSimilarity, DEFAULTS as SIMILARITY } from '../src/components/threads/similarity.mjs'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const ITEMS = process.argv[2]
@@ -30,11 +31,42 @@ const { works: items, satellites } = splitWorks(collection, findOrbits(collectio
 
 /* Use the collection's similarity edges when they have been built, as the page does. */
 let pairs = null
+let similarity = null
 try {
-  pairs = JSON.parse(await readFile(ITEMS.replace(/\.json$/, '.similarity.json'), 'utf8')).edges
+  similarity = JSON.parse(await readFile(ITEMS.replace(/\.json$/, '.similarity.json'), 'utf8'))
+  pairs = similarity.edges
   console.log('using similarity edges')
 } catch { console.log('no similarity file — using shared-tag edges') }
 console.log(`\nlayout of ${items.length} works (${collection.length - items.length} satellites)\n`)
+
+/* The similarity file is built offline (npm run build-similarity), and the
+   page trusts it whenever it exists: an item added or edited without a
+   rebuild floats unlinked, and there is no fallback to shared tags. So the
+   file must be exactly what a fresh build of these items gives. */
+if (similarity) {
+  const usable = collection.filter(i => i && i.id)
+  const ids = new Set(usable.map(i => i.id))
+  const inFile = new Set((pairs || []).flatMap(p => [p.source, p.target]))
+  const unknown = [...inFile].filter(id => !ids.has(id))
+  check('the similarity file names only items in the collection', unknown.length === 0,
+    `${unknown.join(', ')} — run npm run build-similarity`)
+  const fresh = JSON.stringify(buildSimilarity(usable, SIMILARITY))
+  const stale = fresh !== JSON.stringify(pairs) || JSON.stringify(SIMILARITY) !== JSON.stringify(similarity.config)
+  let detail = ''
+  if (stale) {
+    const key = p => `${p.source}|${p.target}`
+    const want = new Map(JSON.parse(fresh).map(p => [key(p), JSON.stringify(p)]))
+    const have = new Map((pairs || []).map(p => [key(p), JSON.stringify(p)]))
+    const missing = [...want.keys()].filter(k => !have.has(k))
+    const extra = [...have.keys()].filter(k => !want.has(k))
+    const changed = [...want.keys()].filter(k => have.has(k) && have.get(k) !== want.get(k))
+    const touched = [...new Set([...missing, ...extra, ...changed].flatMap(k => k.split('|')))]
+    detail = `${missing.length} pairs missing, ${extra.length} extra, ${changed.length} changed` +
+      (touched.length ? ` (${touched.slice(0, 4).join(', ')}${touched.length > 4 ? ', …' : ''})` : '') +
+      ' — run npm run build-similarity'
+  }
+  check('the similarity file is up to date with the items', !stale, detail)
+}
 
 const { nodes, edges, adjacency, width: W, height: H, settled } = layoutGraph(items, pairs)
 

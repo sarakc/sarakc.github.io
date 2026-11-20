@@ -450,7 +450,7 @@ sized nodes still say something without edges — but this is the real
 constraint on the page, and it's a content problem, not a design one.
 
 Add items with `npm run add-item` (opens [`tools/add-item.html`](tools/add-item.html)),
-then `npm run check-items` and `npm run check-graph`.
+then `npm run build-similarity`, `npm run check-items` and `npm run check-graph`.
 
 ## Hosting — one repository per project (2026-11-19)
 

@@ -55,7 +55,7 @@ languages (2), methods (1.5), genres (1.5), community (1), explicit `connects` (
 closeness (0.75). Shared values count more the rarer they are. The file holds
 each item's eight strongest pairs above a score of 0.2, plus its nearest
 `weak` ones below it; the page draws each visible item's three strongest.
-Rebuild after editing items.
+Rebuild after editing items: `check-graph` fails while the file is out of date.
 
 The build also lists pairs whose titles read like the same work but whose
 `project` keys disagree — the cue to add or fix a key.
@@ -119,6 +119,7 @@ file; elsewhere it hands you a download.
 Then:
 
 ```
-npm run check-items    # schema
-npm run check-graph    # the layout still works
+npm run build-similarity   # the lines between items; rebuild after any edit
+npm run check-items        # schema
+npm run check-graph        # the layout still works, and the similarity file is current
 ```
