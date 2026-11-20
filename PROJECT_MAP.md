@@ -7,7 +7,9 @@ Run it locally with `npm run serve` → <http://localhost:8080>. The `/threads` 
 
 To preview the paper candidates without changing the live collection, open
 <http://localhost:8080/#/threads?preview=papers>. This preview works only in the
-development server; production builds always use `public/threads/items.json`.
+development server, which serves `drafts/` at `/__drafts/` (`vue.config.js`);
+without `drafts/` (a fresh clone) the page shows the live items. Production
+builds always use `public/threads/items.json`.
 
 ## Site shell
 
@@ -18,7 +20,7 @@ development server; production builds always use `public/threads/items.json`.
 | `src/router/index.js` | routes: `/` → `HomeView`, `/threads` → `ThreadsView`. Hash history (GitHub Pages friendly) |
 | `src/assets/base.css` | **the palette.** One site token set (`--page-*`, `--accent-blue`, `--page-sans`/`--page-serif`, `--page-max`/`--page-gutter`), then the `--t-*` type colours; legacy Vue-scaffold tokens below. See `DESIGN.md` |
 | `src/assets/main.css` | imports `base.css`, plus global link styles |
-| `vue.config.js` | build config; `publicPath: '/'`, page title |
+| `vue.config.js` | build config; `publicPath: '/'`, page title; the dev server's `/__drafts/` route for `?preview=` |
 
 ## Home page
 

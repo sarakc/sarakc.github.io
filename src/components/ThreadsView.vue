@@ -91,38 +91,46 @@ onBeforeUnmount(() => {
   window.removeEventListener('resize', measureCanvas)
 })
 
-/* Draft collections, development only: ?preview=<name>. The ternary keeps
-   them out of the production build entirely: webpack skips the dead branch,
-   so drafts/ (gitignored, absent in CI) is never bundled or published. */
+/* Draft collections, development only: ?preview=<name>. drafts/ is
+   gitignored, so it is never bundled or published, and a fresh clone may
+   not have it. The dev server hands its files out at /__drafts/
+   (vue.config.js); a draft that isn't there is a 404, and the page shows the
+   live items instead. The ternary and the `development &&` below keep all
+   of it out of the production build: webpack drops the dead branches. */
 const PREVIEWS = process.env.NODE_ENV === 'development' ? {
-  papers: {
-    label: 'papers linked from HomeView.vue',
-    load: () => Promise.all([
-      import('../../drafts/threads-paper-candidates.json'),
-      import('../../drafts/threads-paper-candidates.similarity.json'),
-    ]),
-  },
-  research: {
-    label: 'research atlas drafted from the CV',
-    load: () => Promise.all([
-      import('../../drafts/threads-research.json'),
-      import('../../drafts/threads-research.similarity.json'),
-    ]),
-  },
+  papers: { label: 'papers linked from HomeView.vue', file: 'threads-paper-candidates' },
+  research: { label: 'research atlas drafted from the CV', file: 'threads-research' },
 } : {}
 const previewLabel = ref('')
 
 const loading = ref(false)
+
+/* A draft and its similarity file (optional, as for the live items), or
+   null when the draft isn't in drafts/. */
+async function loadDraft({ file }) {
+  const get = async url => {
+    try {
+      const res = await fetch(url)
+      return res.ok ? await res.json() : null
+    } catch { return null }
+  }
+  const [data, similarity] = await Promise.all([get(`/__drafts/${file}.json`), get(`/__drafts/${file}.similarity.json`)])
+  if (data && Array.isArray(data.items)) return { data, similarity }
+  console.info(`drafts/${file}.json isn't here; showing the live items`)
+  return null
+}
+
 async function loadItems(preview) {
   loading.value = true
   loadFailed.value = false
   try {
     let data
     let similarity = null
-    if (process.env.NODE_ENV === 'development' && PREVIEWS[preview]) {
-      const [draft, sim] = await PREVIEWS[preview].load()
-      data = draft.default || draft
-      similarity = sim.default || sim
+    let draft = null
+    if (process.env.NODE_ENV === 'development' && Object.hasOwn(PREVIEWS, preview || '') &&
+        (draft = await loadDraft(PREVIEWS[preview]))) {
+      data = draft.data
+      similarity = draft.similarity
       isPreview.value = true
       previewLabel.value = PREVIEWS[preview].label
     } else {
@@ -154,7 +162,7 @@ async function loadItems(preview) {
 }
 
 /* Draft data is deliberately available only to the development build. The
-   production compiler removes this branch and its JSON import. */
+   production compiler removes the branch that fetches it. */
 watch(() => route.query.preview, preview => {
   activeTag.value = null
   selectedId.value = null
