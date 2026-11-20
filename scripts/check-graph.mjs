@@ -244,14 +244,18 @@ for (const k of [0.3, 0.5, 0.8, 1, 1.5, 2.5]) {
   screenClashes += clashes(shown, [...pts, ...sats])
   shownAtZoom.push(`${k}×: ${shown.size}`)
   /* Focusing a family labels its satellites with their kickers, and they
-     must fit like any other label. */
-  for (const [parent, list] of satellites) {
-    const family = copies(parent, list, (p, l) => fanPoints(p, l.length))
+     must fit like any other label. A pinned family stays fanned while
+     another is hovered, so every pair of families is tried together too. */
+  const parents = [...satellites.keys()]
+  const fannings = [...parents.map(p => [p]), ...parents.flatMap(p => parents.filter(q => q !== p).map(q => [p, q]))]
+  for (const fanned of fannings) {
+    const [parent] = fanned
+    const family = fanned.flatMap(f => copies(f, satellites.get(f), (p, l) => fanPoints(p, l.length)))
     const famPts = family.map(s => ({ ...s, sizes: (() => { const z = labelSize({ kicker: s.kicker }, []); return { full: z, short: z } })() }))
-    /* As on the page: the focused family is labelled first. */
-    const order = [parent, ...list.map(i => i.id), ...rank.filter(id => id !== parent)]
+    /* As on the page: the pinned family is labelled first, then the hovered one. */
+    const order = [...fanned.flatMap(f => [f, ...satellites.get(f).map(i => i.id)]), ...rank.filter(id => !fanned.includes(id))]
     const famShown = placeOnScreen([...pts, ...famPts], order, EVERYWHERE,
-      { avoid: sats.filter(s => s.parent !== parent).map(satBox), always: [parent], protect: family.map(s => s.id) })
+      { avoid: sats.filter(s => !fanned.includes(s.parent)).map(satBox), always: [parent], protect: family.map(s => s.id) })
     /* Only clashes a satellite takes part in: a pinned parent that is
        crowded at a far zoom is the existing "labelled however crowded" rule. */
     const satIds = new Set(sats.map(x => x.id))
@@ -263,15 +267,16 @@ for (const k of [0.3, 0.5, 0.8, 1, 1.5, 2.5]) {
       /* A pinned parent labelled "however crowded" may cover other dots,
          resting copies included (they sit behind their own paper's dot), but
          never its own fanned copies. */
-      const dots = at.crowded ? family : [...pts, ...sats.filter(x => x.parent !== parent), ...family]
+      const dots = at.crowded ? family : [...pts, ...sats.filter(x => !fanned.includes(x.parent)), ...family]
       for (const d of dots) {
         if (d.id !== id && (satIds.has(id) || satIds.has(d.id)) && boxesCross(at.box, dotOf(d))) c++
       }
     }
     satClashes += c
     /* Like any label, one with no room is left out — but from about the
-       whole-drawing fit inwards, every one finds room. */
-    if (k >= 0.5) satUnplaced += list.filter(i => !famShown.has(i.id)).length
+       whole-drawing fit inwards, every one of a family focused alone finds
+       room. */
+    if (k >= 0.5 && fanned.length === 1) satUnplaced += satellites.get(parent).filter(i => !famShown.has(i.id)).length
   }
 }
 check('labels on screen never cross at any zoom', screenClashes === 0, `${screenClashes} clashes`)

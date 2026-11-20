@@ -276,14 +276,20 @@ const famId = id => parentOf.value.get(id) || id
 /* The same, before visibility: a pinned talk keeps its paper on show. */
 const parentOfAll = parentOf
 
-/* The family whose copies are fanned out: the focused one. It folds back a
-   moment after focus leaves, so the pointer can travel from the paper's dot
-   to a copy without the copy running away. */
-const satFocus = computed(() => {
-  const f = focusId.value ? famId(focusId.value) : null
-  return f && props.satellites.get(f)?.length && points.value.has(f) ? f : null
+/* The families whose copies are fanned out and labelled: the pinned one,
+   and the one hovered or previewed, so pointing at something else never
+   takes the pinned paper's labels away. A family folds back a moment after
+   it stops being wanted, so the pointer can travel from the paper's dot to
+   a copy without the copy running away. */
+const wantedFamilies = computed(() => {
+  const out = []
+  for (const id of [hoveredId.value || peek.value, props.selectedId]) {
+    const f = id ? famId(id) : null
+    if (f && !out.includes(f) && props.satellites.get(f)?.length && points.value.has(f)) out.push(f)
+  }
+  return out.join(' ')   // a string, so an unchanged set triggers nothing
 })
-const satFamily = ref(null)
+const satFamilies = ref(new Set())
 let foldTimer = 0
 
 /* A showing is a paler copy of its paper's dot (orbits.mjs): half behind it
@@ -296,7 +302,7 @@ const satPoints = computed(() => {
   for (const [parent, list] of props.satellites) {
     const p = points.value.get(parent)
     if (!p) continue
-    const out0 = satFamily.value === parent
+    const out0 = satFamilies.value.has(parent)
     const at = out0 ? fanPoints(p, list.length) : restPoints(p, list.map(i => i.id))
     out.set(parent, at.map((o, i) => ({
       id: list[i].id,
@@ -383,8 +389,7 @@ const sizes = computed(() => {
 const labelOrder = computed(() => {
   const first = []
   const s = props.selectedId ? famId(props.selectedId) : null
-  const F = satFamily.value
-  const family = id => (id === F ? satsOf(F).map(x => x.id) : [])
+  const family = id => (satFamilies.value.has(id) ? satsOf(id).map(x => x.id) : [])
   if (s && layout.value.adjacency.has(s)) {
     first.push(s, ...family(s))
     const linked = layout.value.edges
@@ -393,7 +398,7 @@ const labelOrder = computed(() => {
       .map(e => (e.source.id === s ? e.target.id : e.source.id))
     first.push(...linked)
   }
-  if (F && F !== s) first.push(F, ...family(F))
+  for (const F of satFamilies.value) if (F !== s) first.push(F, ...family(F))
   const seen = new Set(first)
   return [...first, ...rank.value.filter(id => !seen.has(id))]
 })
@@ -407,15 +412,14 @@ const placed = computed(() => {
   void fontsReady.value
   const S = sizes.value
   const pts = layout.value.nodes.map(n => ({ ...points.value.get(n.id), sizes: S.get(n.id), slot: n.slot }))
-  /* Every satellite dot is something labels avoid; the focused family's
+  /* Every satellite dot is something labels avoid; the fanned families'
      satellites take part as points, labelled with their kickers. */
-  const F = satFamily.value
-  const famSats = F ? satsOf(F) : []
+  const famSats = [...satFamilies.value].flatMap(satsOf)
   for (const x of famSats) {
     const z = measured({ kicker: x.kicker, year: x.year, venue: x.venue }, [])
     pts.push({ id: x.id, x: x.x, y: x.y, r: x.r, sizes: { full: z, short: z }, slot: 0 })
   }
-  const others = [...satPoints.value].filter(([parent]) => parent !== F).flatMap(([, list]) => list)
+  const others = [...satPoints.value].filter(([parent]) => !satFamilies.value.has(parent)).flatMap(([, list]) => list)
   const avoid = [...others.map(satBox), ...(controlsBox.value ? [controlsBox.value] : [])]
   const s = props.selectedId ? famId(props.selectedId) : null
   return placeOnScreen(pts, labelOrder.value, { x0: 6, y0: 6, x1: size.w - 6, y1: size.h - 6 },
@@ -450,13 +454,10 @@ const labels = computed(() => {
   return out
 })
 const labelFor = computed(() => new Map(labels.value.map(l => [l.node.id, l])))
-/* The focused family's satellites, each labelled with its kicker only: the
+/* The fanned families' satellites, each labelled with its kicker only: the
    title is already on the paper's label. */
-const satLabels = computed(() => {
-  const F = satFamily.value
-  if (!F) return []
-  return satsOf(F).filter(x => placed.value.has(x.id)).map(x => ({ sat: x, ...placed.value.get(x.id) }))
-})
+const satLabels = computed(() => [...satFamilies.value].flatMap(satsOf)
+  .filter(x => placed.value.has(x.id)).map(x => ({ sat: x, ...placed.value.get(x.id) })))
 
 /* ── focus ────────────────────────────────────────────────────────────── */
 
@@ -473,10 +474,18 @@ const peek = computed(() => {
 })
 const focusId = computed(() => hoveredId.value || peek.value || props.selectedId)
 /* Registered here, once focusId exists: it reads it straight away. */
-watch(satFocus, f => {
+watch(wantedFamilies, key => {
   clearTimeout(foldTimer)
-  if (f) satFamily.value = f
-  else foldTimer = setTimeout(() => { satFamily.value = null }, 320)
+  const want = key ? key.split(' ') : []
+  const now = satFamilies.value
+  /* Fan out at once; fold back after a moment. */
+  if (want.some(f => !now.has(f))) satFamilies.value = new Set([...now, ...want])
+  if ([...satFamilies.value].some(f => !want.includes(f))) {
+    foldTimer = setTimeout(() => {
+      const still = wantedFamilies.value ? wantedFamilies.value.split(' ') : []
+      satFamilies.value = new Set([...satFamilies.value].filter(f => still.includes(f)))
+    }, 320)
+  }
 }, { immediate: true })
 
 /* Focus on a satellite is focus on its parent's family. */
@@ -700,7 +709,7 @@ defineExpose({ fitView })
               v-for="(sat, i) in satsOf(node.id)"
               :key="sat.id"
               class="copy"
-              :class="{ out: satFamily === node.id, on: sat.id === selectedId }"
+              :class="{ out: satFamilies.has(node.id), on: sat.id === selectedId }"
               :style="{ transform: `translate(${sat.dx}px, ${sat.dy}px)`, '--depth': i }"
             >
               <circle :r="sat.r" :style="{ fill: sat.colour }" />
@@ -719,7 +728,7 @@ defineExpose({ fitView })
           v-for="sat in satsOf(node.id)"
           :key="sat.id"
           class="node sat"
-          :class="{ dim: !isNear(sat.id), on: sat.id === selectedId, live: satFamily === node.id }"
+          :class="{ dim: !isNear(sat.id), on: sat.id === selectedId, live: satFamilies.has(node.id) }"
           role="button"
           tabindex="0"
           :aria-label="`${sat.item.title}${sat.year ? `, ${sat.year}` : ''}${sat.venue ? `, ${sat.venue}` : ''}`"
@@ -772,7 +781,7 @@ defineExpose({ fitView })
           v-for="l in satLabels"
           :key="`sat-${l.sat.id}`"
           class="label sat-label"
-          :class="{ on: l.sat.id === selectedId, hot: l.sat.id === hoveredId }"
+          :class="{ dim: !isNear(l.sat.id), on: l.sat.id === selectedId, hot: l.sat.id === hoveredId }"
           :x="l.lx" :y="l.ly" :text-anchor="l.anchor"
         ><tspan class="kicker"><tspan
           v-if="l.sat.year" class="year">{{ l.sat.year }}</tspan><tspan
