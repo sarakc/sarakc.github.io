@@ -48,6 +48,11 @@ function measureCanvas() {
 let mq = null
 function onChange(e) { isNarrow.value = e.matches }
 
+/* The topic line grows when "more" opens (or the active topic joins it past
+   the cut), which pushes the canvas down: remeasure whenever it changes size. */
+const controlsEl = ref(null)
+let controlsRo = null
+
 /* `/` opens search, unless you are typing somewhere already. */
 const searchOpen = ref(false)
 const peekId = ref(null)
@@ -83,12 +88,15 @@ onMounted(() => {
   window.addEventListener('keydown', onKey)
   window.addEventListener('resize', measureCanvas)
   measureCanvas()
+  controlsRo = new ResizeObserver(() => measureCanvas())
+  if (controlsEl.value) controlsRo.observe(controlsEl.value)
 })
 
 onBeforeUnmount(() => {
   mq?.removeEventListener('change', onChange)
   window.removeEventListener('keydown', onKey)
   window.removeEventListener('resize', measureCanvas)
+  controlsRo?.disconnect()
 })
 
 /* Draft collections, development only: ?preview=<name>. drafts/ is
@@ -305,7 +313,7 @@ function toggleRow(id) {
       The collection could not be loaded. Try refreshing the page.
     </p>
 
-    <header class="controls">
+    <header ref="controlsEl" class="controls">
       <TagChips :tags="allTags" :active="activeTag" :lead="tagOrder.primaryCount"
                 :labels="tagMeta.labels || {}" @toggle="toggleTag" />
       <button
