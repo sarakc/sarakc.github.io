@@ -9,6 +9,7 @@ import SearchBox from './threads/SearchBox.vue'
 import { describeReasons } from './threads/similarity.mjs'
 import { findOrbits, splitWorks, titleKey } from './threads/orbits.mjs'
 import { orderTags } from './threads/tags.mjs'
+import { isFiltered, escapeStep } from './threads/filters.mjs'
 import { isMine } from './threads/types.mjs'
 import { cvGroups } from './threads/cvgroups.mjs'
 
@@ -74,8 +75,11 @@ function onPick(id) {
 }
 
 function onKey(e) {
-  if (e.key === 'Escape') selectedId.value = null
-  else if (e.key === '/' && !e.metaKey && !e.ctrlKey && !e.altKey && !searchOpen.value && !isTyping(e.target) && inGraph.value) {
+  if (e.key === 'Escape') {
+    const step = escapeStep({ pinned: Boolean(selectedId.value), filtered: hasFilter.value, typing: isTyping(e.target) })
+    if (step === 'unpin') selectedId.value = null
+    else if (step === 'clear') clearFilters()
+  } else if (e.key === '/' && !e.metaKey && !e.ctrlKey && !e.altKey && !searchOpen.value && !isTyping(e.target) && inGraph.value) {
     e.preventDefault()
     openSearch()
   }
@@ -310,6 +314,18 @@ function toggleTag(tag) {
   activeTag.value = activeTag.value === tag ? null : tag
 }
 
+/* `all` shows only while something is filtered, and takes it all off: the
+   topic and research-only. The pin and the view stay. It vanishes once
+   used, so keyboard focus moves on to the first topic word. */
+const hasFilter = computed(() => isFiltered({ tag: activeTag.value, researchOnly: researchOnly.value }))
+const allEl = ref(null)
+function clearFilters() {
+  const hadFocus = Boolean(allEl.value) && document.activeElement === allEl.value
+  activeTag.value = null
+  researchOnly.value = false
+  if (hadFocus) nextTick(() => controlsEl.value?.querySelector('.topics button')?.focus())
+}
+
 function toggleRow(id) {
   selectedId.value = selectedId.value === id ? null : id
 }
@@ -329,8 +345,11 @@ function toggleRow(id) {
     </p>
 
     <header ref="controlsEl" class="controls">
-      <TagChips :tags="allTags" :active="activeTag" :lead="tagOrder.primaryCount"
-                :labels="tagMeta.labels || {}" @toggle="toggleTag" />
+      <div class="topline">
+        <button v-if="hasFilter" ref="allEl" type="button" class="all" @click="clearFilters">all</button>
+        <TagChips :tags="allTags" :active="activeTag" :lead="tagOrder.primaryCount"
+                  :labels="tagMeta.labels || {}" @toggle="toggleTag" />
+      </div>
       <button
         v-if="hasBothRealms"
         type="button"
@@ -465,6 +484,26 @@ function toggleRow(id) {
   align-items: baseline;
   gap: 32px;
 }
+.topline {
+  display: flex;
+  align-items: baseline;
+  gap: 20px;
+  min-width: 0;
+}
+/* Sits outside the topic line's sideways scroll, so it stays put on a phone. */
+.all {
+  flex: none;
+  background: none;
+  border: none;
+  border-bottom: 1px solid transparent;
+  padding: 2px 0;
+  font-family: var(--page-sans);
+  font-size: 13px;
+  color: var(--page-dim);
+  cursor: pointer;
+  transition: color 0.15s;
+}
+.all:hover { color: var(--page-ink); }
 .views { display: inline-flex; gap: 16px; flex: none; font-size: 13px; }
 .views button {
   background: none;

@@ -58,7 +58,11 @@ read as too much text. Ink was chosen.
   top nav carries `← website` on the left, `cv` on the right.
 - **One line of controls:** tags as plain words (most used first, eight shown,
   then `more`), and `network · list` on the right. No counts, no type cards,
-  no chips, no `all`. The active tag is underlined and carries a `×`.
+  no chips. The active tag is underlined and carries a `×`. `all` leads the
+  line only while something is filtered (a topic or research-only); it takes
+  both off and leaves the pin and the view alone. It sits outside the topic
+  line's sideways scroll so it stays put on a phone. Added 2026-11-26: the
+  re-click on the active topic was too hidden a way back to the full graph.
 - **Monochrome graph.** Hollow ink circles, hairline curved edges, a ruled grid
   at 3.5% and nothing else beneath. Blue appears only on what you touch: the
   hovered node fills ink, its edges light blue; the selected node fills blue.
@@ -134,7 +138,8 @@ link away. It must hold for a 1962 novel, an album or a podcast as well as a
   start a word of the title, creator, venue, tags, people or year, over the
   whole collection; title matches rank first, then tier, then newest. Six
   rows at most, in the label's own format; arrowing or pointing previews,
-  Enter pins. Escape closes; a second Escape unpins.
+  Enter pins. Escape closes; a second Escape unpins; once nothing is pinned,
+  Escape clears the filters (2026-11-26).
 - **Pinning frames the neighbourhood.** The camera zooms just enough to frame
   the pinned dot and its neighbours (80px margin, never out past the fit,
   never in past 2.5× the fit) — or doesn't move if they are already in view at

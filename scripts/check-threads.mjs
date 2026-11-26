@@ -209,6 +209,17 @@ await section('level reveal', async () => {
   check('an item filtered out gives null', levelFor('court-elsner-low-resource-translation', withoutPaper, researchPairs, orbits) === null)
 })
 
+await section('filters', async () => {
+  const { isFiltered, escapeStep } = await import('../src/components/threads/filters.mjs')
+  check('nothing on is not filtered', isFiltered({ tag: null, researchOnly: false }) === false)
+  check('a topic is filtered', isFiltered({ tag: 'x', researchOnly: false }) === true)
+  check('research only is filtered', isFiltered({ tag: null, researchOnly: true }) === true)
+  check('Esc unpins before it clears', escapeStep({ pinned: true, filtered: true, typing: false }) === 'unpin')
+  check('Esc clears once nothing is pinned', escapeStep({ pinned: false, filtered: true, typing: false }) === 'clear')
+  check('Esc on the full graph does nothing', escapeStep({ pinned: false, filtered: false, typing: false }) === null)
+  check('Esc while typing does nothing', escapeStep({ pinned: true, filtered: true, typing: true }) === null)
+})
+
 await section('search', async () => {
   const { searchItems } = await import('../src/components/threads/search.mjs')
   const { typeInfo } = await import('../src/components/threads/types.mjs')

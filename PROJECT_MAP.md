@@ -35,7 +35,7 @@ builds always use `public/threads/items.json`.
 
 | file | what it does |
 | --- | --- |
-| `src/components/ThreadsView.vue` | page shell: fetches `items.json`, holds the tag filter, detail level, hover and selection; keeps `?item=` in step with the pin; opens `/` search |
+| `src/components/ThreadsView.vue` | page shell: fetches `items.json`, holds the tag filter (and `all` / Escape to clear it), detail level, hover and selection; keeps `?item=` in step with the pin; opens `/` search |
 | `src/components/threads/GraphView.vue` | renders the graph at window size — camera (zoom, pan, fit), screen-space edges and labels, hover and selection states, the `− + fit` strip |
 | `src/components/threads/graph.mjs` | the layout maths: edge building and per-item edge choice, ranking and detail steps, force settling shaped to the window, brushstroke paths, title wrapping and short titles, label placement in the world and on screen. Pure, and tested by `check-graph` |
 | `src/components/threads/similarity.mjs` | the similarity engine: signals, weights, candidate neighbours, reasons. Pure |
@@ -50,6 +50,7 @@ builds always use `public/threads/items.json`.
 | `src/components/threads/DetailRail.vue`, `TypeCards.vue` | **unused since Ink (2026-11-15)** — kept until the design settles |
 | `src/components/threads/ItemCard.vue` | one row of the list view: year and title, opens to show the detail |
 | `src/components/threads/TagChips.vue` | the topic line — tags as plain words |
+| `src/components/threads/filters.mjs` | whether anything is filtered, and what each Escape press does (unpin, then clear) |
 | `src/components/threads/ThreadsGlyph.vue` | the network glyph on the home page that opens `/threads` |
 | `public/threads/items.json` | **the content.** One object per recommendation |
 | `public/threads/README.md` | the `items.json` schema — required/optional fields (`mine`, `year`), worked example; the type list lives in `types.mjs` |
