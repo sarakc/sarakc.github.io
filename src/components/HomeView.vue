@@ -89,7 +89,6 @@ import brutus from '@/assets/osu-brutus.jpg'
       rel="noopener"
       >LinkedIn</a>   
       <img alt="github" class="icon" src="@/assets/github.svg"/><a href="https://github.com/sarakc" target="_blank" rel="noopener">GitHub</a><br />
-      ⏱️ <a href="/tempo/">Tempo</a> — workouts, focus, meditation, and alarms<br />
       ✉️  court DOT 22 AT osu DOT edu<br />
       <!-- <a href="https://github.com/sarakc/sarakc.github.io"> . s o u r c e   c o d e . </a> -->
 
