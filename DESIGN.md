@@ -5,6 +5,16 @@ update it when a decision changes. Mirrored into Claude's project memory.
 
 Companion docs: [`PROJECT_MAP.md`](PROJECT_MAP.md) for where files live,
 [`public/threads/README.md`](public/threads/README.md) for the `items.json` schema.
+What every project shares is in [`STYLE-PRINCIPLES.md`](../STYLE-PRINCIPLES.md) (outside
+this repo). This file is the style guide for the site and `/threads`, and is being rebuilt
+section by section.
+
+## Character
+
+Personal, exploratory, intelligent and unpretentious: not a SaaS dashboard, and not a media
+publication. No gradients, dark backgrounds, glassy effects, heavy shadows, oversized rounded
+cards or decorative typefaces. Corners stay small (3px on controls). Structure comes from
+thin indigo hairlines and open space.
 
 ## One register
 
